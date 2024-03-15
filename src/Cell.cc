@@ -1,13 +1,21 @@
 #include "Cell.h"
 #include "Direction.h"
 #include "Group.h"
+#include "Order.h"
 #include <cstddef>
 #include <cstdint>
+#include <cstdlib>
 
 namespace cursudsol {
-    Cell::Cell() : value(0) {
+    Cell::Cell() : value(Order::orderSq) {
         for (std::size_t pencilMark = 0; pencilMark < Order::orderSq; ++pencilMark) {
             *(pencilMarks + pencilMark) = true;
+        }
+
+        for (const auto& direction : ALL_DIRECTIONS) {
+            for (const auto& group : ALL_GROUPS) {
+                *(neighbours + group + (direction * (std::size_t) Group::NUM_GROUPS)) = nullptr;
+            }
         }
     }
 
@@ -72,5 +80,48 @@ namespace cursudsol {
 
     bool Cell::containsPencilMark(const std::uint_fast8_t pencilMark) {
         return *(pencilMarks + pencilMark);
+    }
+
+    bool Cell::isFound() {
+        return (value < Order::orderSq);
+    }
+
+    std::uint_fast8_t Cell::countPencilMarks() {
+        std::uint_fast8_t returnVal = 0;
+
+        for (std::uint_fast8_t index = 0; index < Order::orderSq; ++index) {
+            if (*(pencilMarks + index)) {
+                ++returnVal;
+            }
+        }
+
+        return returnVal;
+    }
+
+    bool Cell::solve() {
+        std::uint_fast8_t returnVal = 0;
+        std::uint_fast8_t valueToSet;
+
+        for (std::uint_fast8_t index = 0; index < Order::orderSq; ++index) {
+            if (*(pencilMarks + index)) {
+                valueToSet = index;
+
+                if (++returnVal > 1) {
+                    return false;
+                }
+            }
+        }
+
+        if (returnVal == 1) {
+            value = valueToSet;
+
+            return true;
+        }
+
+        return false;
+    }
+
+    std::uint_fast8_t Cell::getValue() {
+        return value;
     }
 }

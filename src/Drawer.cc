@@ -96,14 +96,21 @@ namespace cursudsol {
         attron(COLOR_PAIR(NUM_COLOUR));
         for (int row = 0; row < Order::order; ++row) {
             for (int col = 0; col < Order::order; ++col) {
-                for (int num = 0; num < Order::orderSq; ++num) {
-                    int dataRow = dataY + row;
-                    int dataCol = dataX + col;
-                    if (grid.getFlatData()[dataCol + (dataRow * Order::orderSq)].containsPencilMark(num)) {
-                        mvwaddch(window,
-                                 y + (row * (Order::order + 1)) + (num / Order::order) + 1,
-                                 x + (col * (Order::order + 1)) + (num % Order::order) + 1,
-                                 num + 48 + 1);
+                Cell* cell = grid.getFlatData() + dataX + col + ((dataY + row) * Order::orderSq);
+
+                if (cell->isFound()) {
+                    mvwaddch(window,
+                             y + (row * (Order::order + 1)) + ((Order::orderSq / 2) / Order::order) + 1,
+                             x + (col * (Order::order + 1)) + ((Order::orderSq / 2) % Order::order) + 1,
+                             cell->getValue() + 48 + 1);
+                } else {
+                    for (int num = 0; num < Order::orderSq; ++num) {
+                        if (cell->containsPencilMark(num)) {
+                            mvwaddch(window,
+                                    y + (row * (Order::order + 1)) + (num / Order::order) + 1,
+                                    x + (col * (Order::order + 1)) + (num % Order::order) + 1,
+                                    num + 48 + 1);
+                        }
                     }
                 }
             }
@@ -118,7 +125,11 @@ namespace cursudsol {
 
         for (int row = 0; row < Order::order; ++row) {
             for (int col = 0; col < Order::order; ++col) {
-                drawInnerGrid(window, y + (row * Order::order * (Order::order + 1)), x + (col * Order::order * (Order::order + 1)), row * Order::order, col * Order::order);
+                drawInnerGrid(window,
+                              y + (row * Order::order * (Order::order + 1)),
+                              x + (col * Order::order * (Order::order + 1)),
+                              row * Order::order,
+                              col * Order::order);
             }
         }
     }

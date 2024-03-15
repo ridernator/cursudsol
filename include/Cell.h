@@ -45,10 +45,18 @@ namespace cursudsol {
 
             bool containsPencilMark(const std::uint_fast8_t pencilMark);
 
+            bool isFound();
+
+            std::uint_fast8_t countPencilMarks();
+
+            bool solve();
+
+            std::uint_fast8_t getValue();
+
         private:
             std::uint_fast8_t value;
 
-            bool pencilMarks[Order::order];
+            bool pencilMarks[Order::orderSq];
 
             Cell* neighbours[(std::size_t) Direction::NUM_DIRECTIONS * (std::size_t) Group::NUM_GROUPS];
     };

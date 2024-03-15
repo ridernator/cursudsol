@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include <vector>
 
 namespace cursudsol {
     enum Group : uint_fast8_t {
@@ -9,4 +10,6 @@ namespace cursudsol {
         BLOCK = COLUMN + 1,
         NUM_GROUPS = BLOCK + 1
     };
+
+    static const std::vector<Group> ALL_GROUPS = {Group::ROW, Group::COLUMN, Group::BLOCK};
 }

@@ -1,14 +1,18 @@
 #include "CurSudSol.h"
 
 #include <ncurses.h>
-#include <unistd.h>
 
 namespace cursudsol {
-    CurSudSol::CurSudSol() : drawer(grid) {
+    CurSudSol::CurSudSol() : drawer(grid),
+                             solver(grid) {
     }
 
     void CurSudSol::draw() {
         drawer.draw();
+    }
+
+    bool CurSudSol::solveStep() {
+        return solver.solveStep();
     }
 }
 
@@ -21,5 +25,7 @@ int main() {
         if (getch() == 'q') {
             break;
         }
+
+        sudsol.solveStep();
     }
 }
