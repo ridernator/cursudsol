@@ -6,14 +6,35 @@
 
 namespace cursudsol {
     Grid::Grid() {
-        flatData[4].removePencilMark(0);
-        flatData[4].removePencilMark(1);
-        flatData[4].removePencilMark(2);
-        flatData[4].removePencilMark(3);
-        flatData[4].removePencilMark(4);
-        flatData[4].removePencilMark(5);
-        flatData[4].removePencilMark(6);
-        flatData[4].removePencilMark(7);
+        for (int i = 0; i < 8; ++i) {
+            for (int j = 0; j < 9; ++j) {
+                if (i != j) {
+                    flatData[i].removePencilMark(j);
+                }
+            }
+        }
+
+        flatData[26].removePencilMark(0);
+        flatData[26].removePencilMark(1);
+        flatData[26].removePencilMark(2);
+        flatData[26].removePencilMark(3);
+        flatData[26].removePencilMark(5);
+
+        flatData[27].removePencilMark(1);
+        flatData[27].removePencilMark(2);
+        flatData[27].removePencilMark(3);
+        flatData[27].removePencilMark(5);
+        flatData[27].removePencilMark(6);
+        flatData[27].removePencilMark(7);
+        flatData[27].removePencilMark(8);
+
+        flatData[56].removePencilMark(0);
+        flatData[56].removePencilMark(1);
+        flatData[56].removePencilMark(3);
+        flatData[56].removePencilMark(5);
+        flatData[56].removePencilMark(6);
+        flatData[56].removePencilMark(7);
+        flatData[56].removePencilMark(8);
 
         // Create start of rows, columns and blocks
         for (std::uint_fast8_t index = 0; index < Order::orderSq; ++index) {

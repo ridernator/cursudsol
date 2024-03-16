@@ -22,6 +22,8 @@ namespace cursudsol {
         clear();
 
         drawGrid(0, 0);
+
+        refresh();
     }
 
     void Drawer::initColours() {

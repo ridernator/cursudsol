@@ -1,11 +1,13 @@
 #include "Solver.h"
 #include "CandidateRemoval.h"
 #include "NakedSingle.h"
+#include "HiddenSingle.h"
 
 namespace cursudsol {
     Solver::Solver(Grid& grid) : grid(grid) {
-        rules.push_back(new NakedSingle());
         rules.push_back(new CandidateRemoval());
+        rules.push_back(new NakedSingle());
+        rules.push_back(new HiddenSingle());
     }
 
     Solver::~Solver() {
