@@ -37,6 +37,10 @@ namespace cursudsol {
             void drawGrid(const int y,
                           const int x);
 
+            void drawBigNum(WINDOW* window,
+                            const int y,
+                            const int x,
+                            const std::uint_fast8_t num);
             Grid& grid;
     };
 }
