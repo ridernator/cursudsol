@@ -42,123 +42,114 @@ namespace cursudsol {
                             const int y,
                             const int x,
                             const std::uint_fast8_t num) {
+        for (std::uint_fast8_t index = 0; index < Order::order; ++index) {
+            mvwhline(window, y + index, x, ' ', Order::order * NUM_SPACING);
+        }
+
         switch (num) {
             case (0) : {
-                mvwvline(window, y, x,     ' ',       3);
-                mvwvline(window, y, x + 1, ACS_VLINE, 3);
-                mvwvline(window, y, x + 2, ' ',       3);
+                mvwvline(window, y, x + 4, ACS_VLINE, 3);
 
                 break;
             }
 
             case (1) : {
-                mvwaddch(window, y,     x,     ACS_HLINE);
-                mvwaddch(window, y,     x + 1, ACS_HLINE);
-                mvwaddch(window, y,     x + 2, ACS_URCORNER);
-                mvwaddch(window, y + 1, x,     ACS_ULCORNER);
-                mvwaddch(window, y + 1, x + 1, ACS_HLINE);
-                mvwaddch(window, y + 1, x + 2, ACS_LRCORNER);
-                mvwaddch(window, y + 2, x,     ACS_LLCORNER);
-                mvwaddch(window, y + 2, x + 1, ACS_HLINE);
-                mvwaddch(window, y + 2, x + 2, ACS_HLINE);
+                mvwaddch(window, y,     x + 3, ACS_HLINE);
+                mvwaddch(window, y,     x + 4, ACS_HLINE);
+                mvwaddch(window, y,     x + 5, ACS_URCORNER);
+                mvwaddch(window, y + 1, x + 3, ACS_ULCORNER);
+                mvwaddch(window, y + 1, x + 4, ACS_HLINE);
+                mvwaddch(window, y + 1, x + 5, ACS_LRCORNER);
+                mvwaddch(window, y + 2, x + 3, ACS_LLCORNER);
+                mvwaddch(window, y + 2, x + 4, ACS_HLINE);
+                mvwaddch(window, y + 2, x + 5, ACS_HLINE);
 
                 break;
             }
 
             case (2) : {
-                mvwaddch(window, y,     x,     ACS_HLINE);
-                mvwaddch(window, y,     x + 1, ACS_HLINE);
-                mvwaddch(window, y,     x + 2, ACS_URCORNER);
-                mvwaddch(window, y + 1, x,     ACS_HLINE);
-                mvwaddch(window, y + 1, x + 1, ACS_HLINE);
-                mvwaddch(window, y + 1, x + 2, ACS_RTEE);
-                mvwaddch(window, y + 2, x,     ACS_HLINE);
-                mvwaddch(window, y + 2, x + 1, ACS_HLINE);
-                mvwaddch(window, y + 2, x + 2, ACS_LRCORNER);
+                mvwaddch(window, y,     x + 3, ACS_HLINE);
+                mvwaddch(window, y,     x + 4, ACS_HLINE);
+                mvwaddch(window, y,     x + 5, ACS_URCORNER);
+                mvwaddch(window, y + 1, x + 3, ACS_HLINE);
+                mvwaddch(window, y + 1, x + 4, ACS_HLINE);
+                mvwaddch(window, y + 1, x + 5, ACS_RTEE);
+                mvwaddch(window, y + 2, x + 3, ACS_HLINE);
+                mvwaddch(window, y + 2, x + 4, ACS_HLINE);
+                mvwaddch(window, y + 2, x + 5, ACS_LRCORNER);
 
                 break;
             }
 
             case (3) : {
-                mvwaddch(window, y,     x,     ACS_VLINE);
-                mvwaddch(window, y,     x + 1, ' ');
-                mvwaddch(window, y,     x + 2, ACS_VLINE);
-                mvwaddch(window, y + 1, x,     ACS_LLCORNER);
-                mvwaddch(window, y + 1, x + 1, ACS_HLINE);
-                mvwaddch(window, y + 1, x + 2, ACS_RTEE);
-                mvwaddch(window, y + 2, x,     ' ');
-                mvwaddch(window, y + 2, x + 1, ' ');
-                mvwaddch(window, y + 2, x + 2, ACS_VLINE);
+                mvwaddch(window, y,     x + 3, ACS_VLINE);
+                mvwaddch(window, y,     x + 5, ACS_VLINE);
+                mvwaddch(window, y + 1, x + 3, ACS_LLCORNER);
+                mvwaddch(window, y + 1, x + 4, ACS_HLINE);
+                mvwaddch(window, y + 1, x + 5, ACS_RTEE);
+                mvwaddch(window, y + 2, x + 5, ACS_VLINE);
 
                 break;
             }
 
             case (4) : {
-                mvwaddch(window, y,     x,     ACS_ULCORNER);
-                mvwaddch(window, y,     x + 1, ACS_HLINE);
-                mvwaddch(window, y,     x + 2, ACS_HLINE);
-                mvwaddch(window, y + 1, x,     ACS_LLCORNER);
-                mvwaddch(window, y + 1, x + 1, ACS_HLINE);
-                mvwaddch(window, y + 1, x + 2, ACS_URCORNER);
-                mvwaddch(window, y + 2, x,     ACS_HLINE);
-                mvwaddch(window, y + 2, x + 1, ACS_HLINE);
-                mvwaddch(window, y + 2, x + 2, ACS_LRCORNER);
+                mvwaddch(window, y,     x + 3, ACS_ULCORNER);
+                mvwaddch(window, y,     x + 4, ACS_HLINE);
+                mvwaddch(window, y,     x + 5, ACS_HLINE);
+                mvwaddch(window, y + 1, x + 3, ACS_LLCORNER);
+                mvwaddch(window, y + 1, x + 4, ACS_HLINE);
+                mvwaddch(window, y + 1, x + 5, ACS_URCORNER);
+                mvwaddch(window, y + 2, x + 3, ACS_HLINE);
+                mvwaddch(window, y + 2, x + 4, ACS_HLINE);
+                mvwaddch(window, y + 2, x + 5, ACS_LRCORNER);
 
                 break;
             }
 
             case (5) : {
-                mvwaddch(window, y,     x,     ACS_VLINE);
-                mvwaddch(window, y,     x + 1, ' ');
-                mvwaddch(window, y,     x + 2, ' ');
-                mvwaddch(window, y + 1, x,     ACS_LTEE);
-                mvwaddch(window, y + 1, x + 1, ACS_HLINE);
-                mvwaddch(window, y + 1, x + 2, ACS_URCORNER);
-                mvwaddch(window, y + 2, x,     ACS_LLCORNER);
-                mvwaddch(window, y + 2, x + 1, ACS_HLINE);
-                mvwaddch(window, y + 2, x + 2, ACS_LRCORNER);
+                mvwaddch(window, y,     x + 3, ACS_VLINE);
+                mvwaddch(window, y + 1, x + 3, ACS_LTEE);
+                mvwaddch(window, y + 1, x + 4, ACS_HLINE);
+                mvwaddch(window, y + 1, x + 5, ACS_URCORNER);
+                mvwaddch(window, y + 2, x + 3, ACS_LLCORNER);
+                mvwaddch(window, y + 2, x + 4, ACS_HLINE);
+                mvwaddch(window, y + 2, x + 5, ACS_LRCORNER);
 
                 break;
             }
 
             case (6) : {
-                mvwaddch(window, y,     x,     ACS_HLINE);
-                mvwaddch(window, y,     x + 1, ACS_HLINE);
-                mvwaddch(window, y,     x + 2, ACS_URCORNER);
-                mvwaddch(window, y + 1, x,     ' ');
-                mvwaddch(window, y + 1, x + 1, ' ');
-                mvwaddch(window, y + 1, x + 2, ACS_VLINE);
-                mvwaddch(window, y + 2, x,     ' ');
-                mvwaddch(window, y + 2, x + 1, ' ');
-                mvwaddch(window, y + 2, x + 2, ACS_VLINE);
+                mvwaddch(window, y,     x + 3, ACS_HLINE);
+                mvwaddch(window, y,     x + 4, ACS_HLINE);
+                mvwaddch(window, y,     x + 5, ACS_URCORNER);
+                mvwaddch(window, y + 1, x + 5, ACS_VLINE);
+                mvwaddch(window, y + 2, x + 5, ACS_VLINE);
 
                 break;
             }
 
             case (7) : {
-                mvwaddch(window, y,     x,     ACS_ULCORNER);
-                mvwaddch(window, y,     x + 1, ACS_HLINE);
-                mvwaddch(window, y,     x + 2, ACS_URCORNER);
-                mvwaddch(window, y + 1, x,     ACS_LTEE);
-                mvwaddch(window, y + 1, x + 1, ACS_HLINE);
-                mvwaddch(window, y + 1, x + 2, ACS_RTEE);
-                mvwaddch(window, y + 2, x,     ACS_LLCORNER);
-                mvwaddch(window, y + 2, x + 1, ACS_HLINE);
-                mvwaddch(window, y + 2, x + 2, ACS_LRCORNER);
+                mvwaddch(window, y,     x + 3, ACS_ULCORNER);
+                mvwaddch(window, y,     x + 4, ACS_HLINE);
+                mvwaddch(window, y,     x + 5, ACS_URCORNER);
+                mvwaddch(window, y + 1, x + 3, ACS_LTEE);
+                mvwaddch(window, y + 1, x + 4, ACS_HLINE);
+                mvwaddch(window, y + 1, x + 5, ACS_RTEE);
+                mvwaddch(window, y + 2, x + 3, ACS_LLCORNER);
+                mvwaddch(window, y + 2, x + 4, ACS_HLINE);
+                mvwaddch(window, y + 2, x + 5, ACS_LRCORNER);
 
                 break;
             }
 
             case (8) : {
-                mvwaddch(window, y,     x,     ACS_ULCORNER);
-                mvwaddch(window, y,     x + 1, ACS_HLINE);
-                mvwaddch(window, y,     x + 2, ACS_URCORNER);
-                mvwaddch(window, y + 1, x,     ACS_LLCORNER);
-                mvwaddch(window, y + 1, x + 1, ACS_HLINE);
-                mvwaddch(window, y + 1, x + 2, ACS_RTEE);
-                mvwaddch(window, y + 2, x,     ' ');
-                mvwaddch(window, y + 2, x + 1, ' ');
-                mvwaddch(window, y + 2, x + 2, ACS_VLINE);
+                mvwaddch(window, y,     x + 3, ACS_ULCORNER);
+                mvwaddch(window, y,     x + 4, ACS_HLINE);
+                mvwaddch(window, y,     x + 5, ACS_URCORNER);
+                mvwaddch(window, y + 1, x + 3, ACS_LLCORNER);
+                mvwaddch(window, y + 1, x + 4, ACS_HLINE);
+                mvwaddch(window, y + 1, x + 5, ACS_RTEE);
+                mvwaddch(window, y + 2, x + 5, ACS_VLINE);
 
                 break;
             }
@@ -171,20 +162,20 @@ namespace cursudsol {
         // Draw lines
         attron(COLOR_PAIR(MAIN_GRID_COLOUR));
         for (int i = 0; i <= Order::order; ++i) {
-            mvwhline(window, y + (i * Order::order * (Order::order + 1)), x, ACS_HLINE, Order::orderSq * (Order::order + 1));
-            mvwvline(window, y, x + (i * Order::order * (Order::order + 1)), ACS_VLINE, Order::orderSq * (Order::order + 1));
+            mvwhline(window, y + (i * Order::order * (Order::order + 1)), x, ACS_HLINE, Order::orderSq * ((Order::order * NUM_SPACING) + 1));
+            mvwvline(window, y, x + (i * Order::order * ((Order::order * NUM_SPACING) + 1)), ACS_VLINE, Order::orderSq * (Order::order + 1));
         }
 
         // Draw corners
         mvwaddch(window, y, x, ACS_ULCORNER);
-        mvwaddch(window, y, x + (Order::orderSq * (Order::order + 1)), ACS_URCORNER);
+        mvwaddch(window, y, x + (Order::orderSq * ((Order::order * NUM_SPACING) + 1)), ACS_URCORNER);
         mvwaddch(window, y + (Order::orderSq * (Order::order + 1)), x, ACS_LLCORNER);
-        mvwaddch(window, y + (Order::orderSq * (Order::order + 1)), x + (Order::orderSq * (Order::order + 1)), ACS_LRCORNER);
+        mvwaddch(window, y + (Order::orderSq * (Order::order + 1)), x + (Order::orderSq * ((Order::order * NUM_SPACING) + 1)), ACS_LRCORNER);
 
         // Draw centres
         for (int row = 1; row < Order::order; ++row) {
             for (int col = 1; col < Order::order; ++col) {
-                mvwaddch(window, y + (row * Order::order * (Order::order + 1)), x + (col * Order::order * (Order::order + 1)), ACS_PLUS);
+                mvwaddch(window, y + (row * Order::order * (Order::order + 1)), x + (col * Order::order * ((Order::order * NUM_SPACING) + 1)), ACS_PLUS);
 
             }
         }
@@ -192,12 +183,12 @@ namespace cursudsol {
         // Draw edge tees
         for (int row = 1; row < Order::order; ++row) {
             mvwaddch(window, y + (row * Order::order * (Order::order + 1)), x, ACS_LTEE);
-            mvwaddch(window, y + (row * Order::order * (Order::order + 1)), x + (Order::orderSq * (Order::order + 1)), ACS_RTEE);
+            mvwaddch(window, y + (row * Order::order * (Order::order + 1)), x + (Order::orderSq * ((Order::order * NUM_SPACING) + 1)), ACS_RTEE);
         }
 
         for (int col = 1; col < Order::order; ++col) {
-            mvwaddch(window, y, x + (col * Order::order * (Order::order + 1)), ACS_TTEE);
-            mvwaddch(window, y + (Order::orderSq * (Order::order + 1)), x + (col * Order::order * (Order::order + 1)), ACS_BTEE);
+            mvwaddch(window, y, x + (col * Order::order * ((Order::order * NUM_SPACING) + 1)), ACS_TTEE);
+            mvwaddch(window, y + (Order::orderSq * (Order::order + 1)), x + (col * Order::order * ((Order::order * NUM_SPACING) + 1)), ACS_BTEE);
         }
         attroff(COLOR_PAIR(MAIN_GRID_COLOUR));
     }
@@ -211,15 +202,15 @@ namespace cursudsol {
         attron(COLOR_PAIR(SUB_GRID_COLOUR));
         for (int row = 1; row < Order::order; ++row) {
             for (int col = 1; col < Order::order; ++col) {
-                mvwhline(window, y + (row * (Order::order + 1)), x + 1, ACS_HLINE, (Order::order * (Order::order + 1)) - 1);
-                mvwvline(window, y + 1, x + (col * (Order::order + 1)), ACS_VLINE, (Order::order * (Order::order + 1)) - 1);
+                mvwhline(window, y + (row * (Order::order + 1)), x + 1, ACS_HLINE, (Order::order * ((Order::order * NUM_SPACING) + 1)) - 1);
+                mvwvline(window, y + 1, x + (col * ((Order::order * NUM_SPACING) + 1)), ACS_VLINE, (Order::order * (Order::order + 1)) - 1);
             }
         }
 
         // Draw centres
         for (int row = 1; row < Order::order; ++row) {
             for (int col = 1; col < Order::order; ++col) {
-                mvwaddch(window, y + (row * (Order::order + 1)), x + (col * (Order::order + 1)), ACS_PLUS);
+                mvwaddch(window, y + (row * (Order::order + 1)), x + (col * ((Order::order * NUM_SPACING) + 1)), ACS_PLUS);
             }
         }
         attroff(COLOR_PAIR(SUB_GRID_COLOUR));
@@ -234,7 +225,7 @@ namespace cursudsol {
 
                 if (cell->isFound()) {
                     attron(COLOR_PAIR(FOUND_COLOUR));
-                    drawBigNum(window, y + (row * (Order::order + 1)) + 1, x + (col * (Order::order + 1)) + 1, cell->getValue());
+                    drawBigNum(window, y + (row * (Order::order + 1)) + 1, x + (col * ((Order::order * NUM_SPACING) + 1)) + 1, cell->getValue());
                     // mvwaddch(window,
                     //          y + (row * (Order::order + 1)) + ((Order::orderSq / 2) / Order::order) + 1,
                     //          x + (col * (Order::order + 1)) + ((Order::orderSq / 2) % Order::order) + 1,
@@ -245,7 +236,7 @@ namespace cursudsol {
                         if (cell->containsPencilMark(num)) {
                             mvwaddch(window,
                                     y + (row * (Order::order + 1)) + (num / Order::order) + 1,
-                                    x + (col * (Order::order + 1)) + (num % Order::order) + 1,
+                                    x + (col * ((Order::order * NUM_SPACING) + 1)) + ((num % Order::order) * NUM_SPACING) + 1 + 1,
                                     num + 48 + 1);
                         }
                     }
@@ -264,7 +255,7 @@ namespace cursudsol {
             for (int col = 0; col < Order::order; ++col) {
                 drawInnerGrid(window,
                               y + (row * Order::order * (Order::order + 1)),
-                              x + (col * Order::order * (Order::order + 1)),
+                              x + (col * Order::order * ((Order::order * NUM_SPACING) + 1)),
                               row * Order::order,
                               col * Order::order);
             }
