@@ -18,6 +18,8 @@ namespace cursudsol {
             static const int NUM_COLOUR       = 3;
             static const int FOUND_COLOUR     = 4;
 
+            static const int NUM_SPACING = 3;
+
             void initColours();
 
             void drawOuterGrid(WINDOW* window,
