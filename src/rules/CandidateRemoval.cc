@@ -6,8 +6,6 @@
 
 namespace cursudsol {
     bool CandidateRemoval::solveStep(Grid& grid) {
-        bool returnVal = false;
-
         for (std::uint_fast8_t index = 0; index < Order::orderSq * Order::orderSq; ++index) {
             Cell* cell = grid.getFlatData() + index;
             Cell* testCell;
@@ -21,7 +19,7 @@ namespace cursudsol {
                             if (testCell->containsPencilMark(cell->getValue())) {
                                 testCell->removePencilMark(cell->getValue());
 
-                                returnVal = true;
+                                return true;
                             }
 
                             testCell = testCell->getDirectionInGroup(direction, group);
@@ -31,6 +29,6 @@ namespace cursudsol {
             }
         }
 
-        return returnVal;
+        return false;
     }
 }
