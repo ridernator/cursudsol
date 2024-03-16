@@ -6,44 +6,62 @@
 
 namespace cursudsol {
     Grid::Grid() {
-        flatData[0].removePencilMark(0);
-        flatData[0].removePencilMark(1);
-        flatData[0].removePencilMark(2);
-        flatData[0].removePencilMark(3);
-        flatData[0].removePencilMark(4);
-        flatData[0].removePencilMark(5);
-        flatData[0].removePencilMark(6);
-        flatData[0].removePencilMark(7);
+        flatData[4].removePencilMark(0);
+        flatData[4].removePencilMark(1);
+        flatData[4].removePencilMark(2);
+        flatData[4].removePencilMark(3);
+        flatData[4].removePencilMark(4);
+        flatData[4].removePencilMark(5);
+        flatData[4].removePencilMark(6);
+        flatData[4].removePencilMark(7);
 
-        // for (std::uint_fast8_t index = 0; index < Order::orderSq; ++index) {
-        //     *(*(groups + Group::ROW) + index) = flatData + (index * Order::orderSq);
-        //     *(*(groups + Group::COLUMN) + index) = flatData + index;
-        //
-        //     int blockStartRow = Order::order * (index / Order::order);
-        //     int blockStartCol = index % Order::order;
-        //     *(*(groups + Group::BLOCK) + index) = flatData + blockStartCol + (blockStartRow * Order::orderSq);
-        // }
-        //
-        // for (std::uint_fast8_t index = 0; index < Order::orderSq * Order::orderSq; ++index) {
-        //     if (index % Order::orderSq != Order::orderSq - 1) {
-        //         (*(flatData + index)).setDirectionInGroup(Direction::NEXT, Group::ROW, flatData + index + 1);
-        //         (*(flatData + index)).setDirectionInGroup(Direction::NEXT, Group::BLOCK, flatData + index + 1);
-        //     }
-        //
-        //     if (index % Order::orderSq != 0) {
-        //         (*(flatData + index)).setDirectionInGroup(Direction::PREVIOUS, Group::ROW, flatData + index - 1);
-        //         (*(flatData + index)).setDirectionInGroup(Direction::PREVIOUS, Group::BLOCK, flatData + index - 1);
-        //     }
-        //
-        //     if (index < Order::orderSq * (Order::orderSq - 1)) {
-        //         (*(flatData + index)).setDirectionInGroup(Direction::NEXT, Group::COLUMN, flatData + index + Order::orderSq);
-        //     }
-        //
-        //     if (index < Order::orderSq) {
-        //         (*(flatData + index)).setDirectionInGroup(Direction::PREVIOUS, Group::COLUMN, flatData + index - Order::orderSq);
-        //     }
-        //
-        // }
+        // Create start of rows, columns and blocks
+        for (std::uint_fast8_t index = 0; index < Order::orderSq; ++index) {
+            *(*(groups + Group::ROW) + index) = flatData + (index * Order::orderSq);
+            *(*(groups + Group::COLUMN) + index) = flatData + index;
+
+            int blockStartRow = Order::order * (index / Order::order);
+            int blockStartCol = Order::order * (index % Order::order);
+            *(*(groups + Group::BLOCK) + index) = flatData + blockStartCol + (blockStartRow * Order::orderSq);
+        }
+
+        // Link cells
+        for (std::uint_fast8_t index = 0; index < Order::orderSq * Order::orderSq; ++index) {
+            // Rows
+            if (index % Order::orderSq != Order::orderSq - 1) {
+                (flatData + index)->setDirectionInGroup(Direction::NEXT, Group::ROW, flatData + index + 1);
+            }
+
+            if (index % Order::orderSq != 0) {
+                (flatData + index)->setDirectionInGroup(Direction::PREVIOUS, Group::ROW, flatData + index - 1);
+            }
+
+            // Columns
+            if (index < Order::orderSq * (Order::orderSq - 1)) {
+                (flatData + index)->setDirectionInGroup(Direction::NEXT, Group::COLUMN, flatData + index + Order::orderSq);
+            }
+
+            if (index >= Order::orderSq) {
+                (flatData + index)->setDirectionInGroup(Direction::PREVIOUS, Group::COLUMN, flatData + index - Order::orderSq);
+            }
+
+            // Blocks
+            if (index % Order::order == Order::order - 1) {
+                if ((index / Order::orderSq) % Order::order != Order::order - 1) {
+                    (flatData + index)->setDirectionInGroup(Direction::NEXT, Group::BLOCK, flatData + index + Order::orderSq - (Order::order - 1));
+                }
+            } else {
+                (flatData + index)->setDirectionInGroup(Direction::NEXT, Group::BLOCK, (flatData + index)->getDirectionInGroup(Direction::NEXT, Group::ROW));
+            }
+
+            if (index % Order::order == 0) {
+                if ((index / Order::orderSq) % Order::order != 0) {
+                    (flatData + index)->setDirectionInGroup(Direction::PREVIOUS, Group::BLOCK, flatData + index - Order::orderSq + (Order::order - 1));
+                }
+            } else {
+                (flatData + index)->setDirectionInGroup(Direction::PREVIOUS, Group::BLOCK, (flatData + index)->getDirectionInGroup(Direction::PREVIOUS, Group::ROW));
+            }
+        }
     }
 
     Cell* Grid::getFlatData() {

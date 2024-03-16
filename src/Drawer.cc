@@ -1,5 +1,6 @@
 #include "Drawer.h"
 #include "Order.h"
+#include <ncurses.h>
 
 namespace cursudsol {
     Drawer::Drawer(Grid& grid) : grid(grid) {
@@ -30,6 +31,7 @@ namespace cursudsol {
             init_pair(MAIN_GRID_COLOUR, COLOR_GREEN, COLOR_BLACK);
             init_pair(SUB_GRID_COLOUR,  COLOR_BLUE,  COLOR_BLACK);
             init_pair(NUM_COLOUR,       COLOR_WHITE, COLOR_BLACK);
+            init_pair(FOUND_COLOUR,     COLOR_BLACK, COLOR_GREEN);
         }
     }
 
@@ -94,15 +96,19 @@ namespace cursudsol {
 
         // Draw pencil marks
         attron(COLOR_PAIR(NUM_COLOUR));
+        // for (int row = 0; row < 1; ++row) {
+        //     for (int col = 0; col < 1; ++col) {
         for (int row = 0; row < Order::order; ++row) {
             for (int col = 0; col < Order::order; ++col) {
                 Cell* cell = grid.getFlatData() + dataX + col + ((dataY + row) * Order::orderSq);
 
                 if (cell->isFound()) {
+                    attron(COLOR_PAIR(FOUND_COLOUR));
                     mvwaddch(window,
                              y + (row * (Order::order + 1)) + ((Order::orderSq / 2) / Order::order) + 1,
                              x + (col * (Order::order + 1)) + ((Order::orderSq / 2) % Order::order) + 1,
                              cell->getValue() + 48 + 1);
+                    attroff(COLOR_PAIR(FOUND_COLOUR));
                 } else {
                     for (int num = 0; num < Order::orderSq; ++num) {
                         if (cell->containsPencilMark(num)) {

@@ -15,7 +15,7 @@ namespace cursudsol {
             bool solveStep();
 
         private:
-            Grid grid;
+            Grid& grid;
 
             std::vector<Rule*> rules;
 

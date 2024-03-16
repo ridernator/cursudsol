@@ -5,7 +5,7 @@
 namespace cursudsol {
     Solver::Solver(Grid& grid) : grid(grid) {
         rules.push_back(new NakedSingle());
-        // rules.push_back(new CandidateRemoval());
+        rules.push_back(new CandidateRemoval());
     }
 
     Solver::~Solver() {
