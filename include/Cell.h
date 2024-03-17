@@ -55,10 +55,12 @@ namespace cursudsol {
 
             std::uint_fast8_t getValue();
 
+            std::uint_fast16_t getPencilMarks();
+
         private:
             std::uint_fast8_t value;
 
-            bool pencilMarks[Order::orderSq];
+            std::uint_fast16_t pencilMarks;
 
             Cell* neighbours[(std::size_t) Direction::NUM_DIRECTIONS * (std::size_t) Group::NUM_GROUPS];
     };
