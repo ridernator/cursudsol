@@ -1,5 +1,6 @@
 #include "Solver.h"
 #include "CandidateRemoval.h"
+#include "NakedPair.h"
 #include "NakedSingle.h"
 #include "HiddenSingle.h"
 
@@ -8,6 +9,7 @@ namespace cursudsol {
         rules.push_back(new CandidateRemoval());
         rules.push_back(new NakedSingle());
         rules.push_back(new HiddenSingle());
+        rules.push_back(new NakedPair());
     }
 
     Solver::~Solver() {

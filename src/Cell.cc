@@ -5,12 +5,11 @@
 #include <cstddef>
 #include <cstdint>
 #include <cstdlib>
+#include <limits>
 
 namespace cursudsol {
     Cell::Cell() : value(Order::orderSq) {
-        for (std::size_t pencilMark = 0; pencilMark < Order::orderSq; ++pencilMark) {
-            *(pencilMarks + pencilMark) = true;
-        }
+        pencilMarks = std::numeric_limits<std::uint_fast16_t>::max();
 
         for (const auto& direction : ALL_DIRECTIONS) {
             for (const auto& group : ALL_GROUPS) {
@@ -79,11 +78,11 @@ namespace cursudsol {
     }
 
     void Cell::removePencilMark(const std::uint_fast8_t pencilMark) {
-        *(pencilMarks + pencilMark) = false;
+        pencilMarks &= ~(1 << pencilMark);
     }
 
     bool Cell::containsPencilMark(const std::uint_fast8_t pencilMark) {
-        return *(pencilMarks + pencilMark);
+        return pencilMarks & (1 << pencilMark);
     }
 
     bool Cell::isFound() {
@@ -94,7 +93,7 @@ namespace cursudsol {
         std::uint_fast8_t returnVal = 0;
 
         for (std::uint_fast8_t index = 0; index < Order::orderSq; ++index) {
-            if (*(pencilMarks + index)) {
+            if (containsPencilMark(index)) {
                 ++returnVal;
             }
         }
@@ -107,7 +106,7 @@ namespace cursudsol {
         std::uint_fast8_t valueToSet;
 
         for (std::uint_fast8_t index = 0; index < Order::orderSq; ++index) {
-            if (*(pencilMarks + index)) {
+            if (containsPencilMark(index)) {
                 valueToSet = index;
 
                 if (++returnVal > 1) {
@@ -127,5 +126,9 @@ namespace cursudsol {
 
     std::uint_fast8_t Cell::getValue() {
         return value;
+    }
+
+    std::uint_fast16_t Cell::getPencilMarks() {
+        return pencilMarks;
     }
 }
