@@ -12,6 +12,8 @@ namespace cursudsol {
         public:
             Cell();
 
+            void setValue(const uint_fast8_t value);
+
             void setDirectionInGroup(const Direction direction,
                                      const Group group,
                                      Cell* cell);

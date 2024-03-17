@@ -7,7 +7,7 @@
 namespace cursudsol {
     class CurSudSol {
         public:
-            CurSudSol();
+            CurSudSol(const char* initialGrid);
 
             void draw();
 

@@ -7,7 +7,7 @@
 namespace cursudsol {
     class Grid{
         public:
-            Grid();
+            Grid(const char* initialGrid);
 
             Cell* getFlatData();
 

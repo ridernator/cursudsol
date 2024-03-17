@@ -3,8 +3,9 @@
 #include <ncurses.h>
 
 namespace cursudsol {
-    CurSudSol::CurSudSol() : drawer(grid),
-                             solver(grid) {
+    CurSudSol::CurSudSol(const char* initialGrid) : grid(initialGrid),
+                                                    drawer(grid),
+                                                    solver(grid) {
     }
 
     void CurSudSol::draw() {
@@ -16,8 +17,9 @@ namespace cursudsol {
     }
 }
 
-int main() {
-    cursudsol::CurSudSol sudsol;
+int main(const int,
+         const char** argv) {
+    cursudsol::CurSudSol sudsol(*(argv + 1));
 
     while (true) {
         sudsol.draw();

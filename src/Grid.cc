@@ -5,36 +5,12 @@
 #include <cstdlib>
 
 namespace cursudsol {
-    Grid::Grid() {
-        for (int i = 0; i < 8; ++i) {
-            for (int j = 0; j < 9; ++j) {
-                if (i != j) {
-                    flatData[i].removePencilMark(j);
-                }
+    Grid::Grid(const char* initialGrid) {
+        for (std::uint_fast8_t index = 0; index < Order::orderSq * Order::orderSq; ++index) {
+            if ((*(initialGrid + index) > '0') && (*(initialGrid + index) - 48 <= Order::orderSq)) {
+                (flatData + index)->setValue((*(initialGrid + index) - 48) - 1);
             }
         }
-
-        flatData[26].removePencilMark(0);
-        flatData[26].removePencilMark(1);
-        flatData[26].removePencilMark(2);
-        flatData[26].removePencilMark(3);
-        flatData[26].removePencilMark(5);
-
-        flatData[27].removePencilMark(1);
-        flatData[27].removePencilMark(2);
-        flatData[27].removePencilMark(3);
-        flatData[27].removePencilMark(5);
-        flatData[27].removePencilMark(6);
-        flatData[27].removePencilMark(7);
-        flatData[27].removePencilMark(8);
-
-        flatData[56].removePencilMark(0);
-        flatData[56].removePencilMark(1);
-        flatData[56].removePencilMark(3);
-        flatData[56].removePencilMark(5);
-        flatData[56].removePencilMark(6);
-        flatData[56].removePencilMark(7);
-        flatData[56].removePencilMark(8);
 
         // Create start of rows, columns and blocks
         for (std::uint_fast8_t index = 0; index < Order::orderSq; ++index) {

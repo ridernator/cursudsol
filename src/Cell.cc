@@ -19,6 +19,10 @@ namespace cursudsol {
         }
     }
 
+    void Cell::setValue(const uint_fast8_t value) {
+        this->value = value;
+    }
+
     void Cell::setDirectionInGroup(const Direction direction,
                                    const Group group,
                                    Cell* cell) {
