@@ -5,6 +5,7 @@
 
 namespace cursudsol {
     class CandidateRemoval : public Rule {
-        bool solveStep(Grid& grid) override;
+        bool solveStep(Grid& grid,
+                       const bool greedy = true) override;
     };
 }

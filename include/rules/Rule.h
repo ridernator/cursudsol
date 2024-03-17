@@ -7,6 +7,7 @@ namespace cursudsol {
         public:
             virtual ~Rule() {}
 
-            virtual bool solveStep(Grid& grid) = 0;
+            virtual bool solveStep(Grid& grid,
+                                   const bool greedy = true) = 0;
     };
 }

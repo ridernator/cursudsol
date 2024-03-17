@@ -5,7 +5,10 @@
 #include <cstdint>
 
 namespace cursudsol {
-    bool HiddenSingle::solveStep(Grid& grid) {
+    bool HiddenSingle::solveStep(Grid& grid,
+                                 const bool greedy) {
+        bool returnVal = false;
+
         for (const auto& group : ALL_GROUPS) {
             for (std::uint_fast8_t groupIndex = 0; groupIndex < Order::orderSq; ++groupIndex) {
                 for (std::uint_fast8_t num = 0; num < Order::orderSq; ++num) {
@@ -35,12 +38,16 @@ namespace cursudsol {
                             }
                         }
 
-                        return candidate->solve();
+                        if (greedy) {
+                            returnVal = true;
+                        } else {
+                            return candidate->solve();
+                        }
                     }
                 }
             }
         }
 
-        return false;
+        return returnVal;
     }
 }

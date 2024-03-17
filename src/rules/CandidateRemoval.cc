@@ -5,7 +5,10 @@
 #include <cstdint>
 
 namespace cursudsol {
-    bool CandidateRemoval::solveStep(Grid& grid) {
+    bool CandidateRemoval::solveStep(Grid& grid,
+                                     const bool greedy) {
+        bool returnVal = false;
+
         for (std::uint_fast8_t index = 0; index < Order::orderSq * Order::orderSq; ++index) {
             Cell* cell = grid.getFlatData() + index;
             Cell* testCell;
@@ -19,7 +22,11 @@ namespace cursudsol {
                             if (testCell->containsPencilMark(cell->getValue())) {
                                 testCell->removePencilMark(cell->getValue());
 
-                                return true;
+                                if (greedy) {
+                                    returnVal = true;
+                                } else {
+                                    return true;
+                                }
                             }
 
                             testCell = testCell->getDirectionInGroup(direction, group);
@@ -29,6 +36,6 @@ namespace cursudsol {
             }
         }
 
-        return false;
+        return returnVal;
     }
 }
