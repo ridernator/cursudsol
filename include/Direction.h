@@ -4,10 +4,9 @@
 #include <vector>
 
 namespace cursudsol {
-    enum Direction : uint_fast8_t {
-        NEXT = 0,
-        PREVIOUS = NEXT + 1,
-        NUM_DIRECTIONS = PREVIOUS + 1
+    enum class Direction : uint_fast8_t {
+        NEXT,
+        PREVIOUS,
     };
 
     static const std::vector<Direction> ALL_DIRECTIONS = {Direction::NEXT, Direction::PREVIOUS};

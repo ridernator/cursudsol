@@ -1,8 +1,9 @@
 #pragma once
 
-#include <ncurses.h>
-
 #include "Grid.h"
+#include "Order.h"
+
+#include <ncurses.h>
 
 namespace cursudsol {
     class Drawer {
@@ -42,7 +43,9 @@ namespace cursudsol {
             void drawBigNum(WINDOW* window,
                             const int y,
                             const int x,
-                            const std::uint_fast8_t num);
+                            const IntType num);
             Grid& grid;
+
+            const Order& order;
     };
 }

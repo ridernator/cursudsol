@@ -1,11 +1,13 @@
 #include "CurSudSol.h"
 
 #include <ncurses.h>
+#include <string>
 
 namespace cursudsol {
-    CurSudSol::CurSudSol(const char* initialGrid) : grid(initialGrid),
-                                                    drawer(grid),
-                                                    solver(grid) {
+    CurSudSol::CurSudSol(const std::string& initialGrid) : order(3),
+                                                           grid(order, initialGrid),
+                                                           drawer(grid),
+                                                           solver(grid) {
     }
 
     void CurSudSol::draw() {

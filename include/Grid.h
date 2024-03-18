@@ -2,35 +2,29 @@
 
 #include "Cell.h"
 #include "Order.h"
-#include <cstddef>
+
+#include <map>
+#include <string>
 
 namespace cursudsol {
     class Grid{
         public:
-            Grid(const char* initialGrid);
+            Grid(const Order& order,
+                 const std::string& initialGrid);
 
-            Cell* getFlatData();
+            ~Grid();
 
-            Cell* getGroup(const Group group,
-                           const std::size_t index);
+            Cell** getFlatData();
 
-            Cell** getGroups(const Group group);
+            std::vector<Cell*>& getGroups(const Group group);
 
-            Cell* getRow(const std::size_t index);
-
-            Cell** getRows();
-
-            Cell* getColumn(const std::size_t index);
-
-            Cell** getColumns();
-
-            Cell* getBlock(const std::size_t index);
-
-            Cell** getBlocks();
+            const Order& getOrder() const;
 
         private:
-            Cell flatData[Order::orderSq * Order::orderSq];
+            const Order& order;
 
-            Cell* groups[Group::NUM_GROUPS][Order::orderSq];
+            Cell** flatData;
+
+            std::map<Group, std::vector<Cell*>> groups;
     };
 }
