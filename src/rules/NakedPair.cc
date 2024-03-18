@@ -1,50 +1,58 @@
 #include "NakedPair.h"
+#include "Direction.h"
 #include "Group.h"
 #include "Order.h"
-#include <cstddef>
-#include <set>
 
 namespace cursudsol {
     bool NakedPair::solveStep(Grid& grid,
                               const bool greedy) {
-        bool returnVal = false;
+        bool returnVal;
+        bool success;
+        bool thirdMatch;
 
-        for (const auto group : ALL_GROUPS) {
-            for (std::size_t index = 0; index < Order::orderSq; ++index) {
-                Cell* cell1 = grid.getGroup(group, index);
+        Cell* cell1;
+        Cell* cell2;
+        Cell* badCell;
+        Cell* remover;
+
+        const Order& order = grid.getOrder();
+
+        for (const auto& group : ALL_GROUPS) {
+            for (const auto& cell : grid.getGroups(group)) {
+                cell1 = cell;
 
                 while (cell1 != nullptr) {
-                    bool success = false;
+                    success = false;
 
                     if ((!cell1->isFound()) && (cell1->countPencilMarks() == 2)) {
-                        Cell* cell2 = cell1->getNextInGroup(group);
+                        cell2 = cell1->getNeighbour(Direction::NEXT, group);
 
                         while (cell2 != nullptr) {
                             if ((!cell2->isFound()) &&
                                 (cell2->countPencilMarks() == 2) &&
-                                (cell2->getPencilMarks() == cell1->getPencilMarks())) {
+                                (comparePencilMarks(cell2, cell1, order.order2))) {
                                 // Found matching pair. Now check there aren't any others
-                                Cell* badCell = cell2->getNextInGroup(group);
-                                bool thirdMatch = false;
+                                badCell = cell2->getNeighbour(Direction::NEXT, group);
+                                thirdMatch = false;
 
                                 while (badCell != nullptr) {
                                     if ((!badCell->isFound()) &&
                                         (badCell->countPencilMarks() == 2) &&
-                                        (badCell->getPencilMarks() == cell1->getPencilMarks())) {
+                                        (comparePencilMarks(badCell, cell1, order.order2))) {
                                         // Give up. Found 3rd candidate
                                         thirdMatch = true;
 
                                         break;
                                     }
 
-                                    badCell = badCell->getNextInGroup(group);
+                                    badCell = badCell->getNeighbour(Direction::NEXT, group);
                                 }
 
                                 if (!thirdMatch) {
                                     // Get rid
-                                    for (std::uint_fast8_t remove = 0; remove < Order::orderSq; ++remove) {
+                                    for (IntType remove = 0; remove < order.order2; ++remove) {
                                         if (cell1->containsPencilMark(remove)) {
-                                            Cell* remover = grid.getGroup(group, index);
+                                            remover = cell;
 
                                             while (remover != nullptr) {
                                                 if ((remover != cell1) &&
@@ -56,7 +64,7 @@ namespace cursudsol {
                                                     returnVal = true;
                                                 }
 
-                                                remover = remover->getNextInGroup(group);
+                                                remover = remover->getNeighbour(Direction::NEXT, group);
                                             }
                                         }
                                     }
@@ -65,7 +73,7 @@ namespace cursudsol {
                                 break;
                             }
 
-                            cell2 = cell2->getNextInGroup(group);
+                            cell2 = cell2->getNeighbour(Direction::NEXT, group);
                         }
                     }
 
@@ -77,11 +85,23 @@ namespace cursudsol {
                         break;
                     }
 
-                    cell1 = cell1->getNextInGroup(group);
+                    cell1 = cell1->getNeighbour(Direction::NEXT, group);
                 }
             }
         }
 
         return returnVal;
+    }
+
+    bool NakedPair::comparePencilMarks(Cell* a,
+                                       Cell* b,
+                                       const IntType count) {
+        for (IntType index = 0; index < count; ++index) {
+            if (a->containsPencilMark(index) != b->containsPencilMark(index)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

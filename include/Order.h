@@ -2,8 +2,17 @@
 
 #include <cstdint>
 
-namespace cursudsol::Order {
-    static const std::uint_fast8_t order = 3;
+typedef std::uint64_t IntType;
 
-    static const std::uint_fast8_t orderSq = order * order;
+namespace cursudsol {
+    class Order {
+        public:
+            Order(const IntType order);
+
+            const IntType order;
+
+            const IntType order2;
+
+            const IntType order4;
+    };
 }

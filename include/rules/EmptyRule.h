@@ -5,7 +5,8 @@
 
 namespace cursudsol {
     class EmptyRule : public Rule {
-        bool solveStep(Grid& grid,
-                       const bool greedy = true) override;
+        public:
+            bool solveStep(Grid& grid,
+                           const bool greedy = true) override;
     };
 }

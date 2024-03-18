@@ -4,7 +4,8 @@
 #include <ncurses.h>
 
 namespace cursudsol {
-    Drawer::Drawer(Grid& grid) : grid(grid) {
+    Drawer::Drawer(Grid& grid) : grid(grid),
+                                 order(grid.getOrder()) {
         initscr();
         raw();
         keypad(stdscr, TRUE);
@@ -41,9 +42,9 @@ namespace cursudsol {
     void Drawer::drawBigNum(WINDOW* window,
                             const int y,
                             const int x,
-                            const std::uint_fast8_t num) {
-        for (std::uint_fast8_t index = 0; index < Order::order; ++index) {
-            mvwhline(window, y + index, x, ' ', Order::order * NUM_SPACING);
+                            const IntType num) {
+        for (std::uint_fast8_t index = 0; index < order.order; ++index) {
+            mvwhline(window, y + index, x, ' ', order.order * NUM_SPACING);
         }
 
         switch (num) {
@@ -161,34 +162,34 @@ namespace cursudsol {
                                const int x) {
         // Draw lines
         attron(COLOR_PAIR(MAIN_GRID_COLOUR));
-        for (int i = 0; i <= Order::order; ++i) {
-            mvwhline(window, y + (i * Order::order * (Order::order + 1)), x, ACS_HLINE, Order::orderSq * ((Order::order * NUM_SPACING) + 1));
-            mvwvline(window, y, x + (i * Order::order * ((Order::order * NUM_SPACING) + 1)), ACS_VLINE, Order::orderSq * (Order::order + 1));
+        for (IntType i = 0; i <= order.order; ++i) {
+            mvwhline(window, y + (i * order.order * (order.order + 1)), x, ACS_HLINE, order.order2 * ((order.order * NUM_SPACING) + 1));
+            mvwvline(window, y, x + (i * order.order * ((order.order * NUM_SPACING) + 1)), ACS_VLINE, order.order2 * (order.order + 1));
         }
 
         // Draw corners
         mvwaddch(window, y, x, ACS_ULCORNER);
-        mvwaddch(window, y, x + (Order::orderSq * ((Order::order * NUM_SPACING) + 1)), ACS_URCORNER);
-        mvwaddch(window, y + (Order::orderSq * (Order::order + 1)), x, ACS_LLCORNER);
-        mvwaddch(window, y + (Order::orderSq * (Order::order + 1)), x + (Order::orderSq * ((Order::order * NUM_SPACING) + 1)), ACS_LRCORNER);
+        mvwaddch(window, y, x + (order.order2 * ((order.order * NUM_SPACING) + 1)), ACS_URCORNER);
+        mvwaddch(window, y + (order.order2 * (order.order + 1)), x, ACS_LLCORNER);
+        mvwaddch(window, y + (order.order2 * (order.order + 1)), x + (order.order2 * ((order.order * NUM_SPACING) + 1)), ACS_LRCORNER);
 
         // Draw centres
-        for (int row = 1; row < Order::order; ++row) {
-            for (int col = 1; col < Order::order; ++col) {
-                mvwaddch(window, y + (row * Order::order * (Order::order + 1)), x + (col * Order::order * ((Order::order * NUM_SPACING) + 1)), ACS_PLUS);
+        for (IntType row = 1; row < order.order; ++row) {
+            for (IntType col = 1; col < order.order; ++col) {
+                mvwaddch(window, y + (row * order.order * (order.order + 1)), x + (col * order.order * ((order.order * NUM_SPACING) + 1)), ACS_PLUS);
 
             }
         }
 
         // Draw edge tees
-        for (int row = 1; row < Order::order; ++row) {
-            mvwaddch(window, y + (row * Order::order * (Order::order + 1)), x, ACS_LTEE);
-            mvwaddch(window, y + (row * Order::order * (Order::order + 1)), x + (Order::orderSq * ((Order::order * NUM_SPACING) + 1)), ACS_RTEE);
+        for (IntType row = 1; row < order.order; ++row) {
+            mvwaddch(window, y + (row * order.order * (order.order + 1)), x, ACS_LTEE);
+            mvwaddch(window, y + (row * order.order * (order.order + 1)), x + (order.order2 * ((order.order * NUM_SPACING) + 1)), ACS_RTEE);
         }
 
-        for (int col = 1; col < Order::order; ++col) {
-            mvwaddch(window, y, x + (col * Order::order * ((Order::order * NUM_SPACING) + 1)), ACS_TTEE);
-            mvwaddch(window, y + (Order::orderSq * (Order::order + 1)), x + (col * Order::order * ((Order::order * NUM_SPACING) + 1)), ACS_BTEE);
+        for (IntType col = 1; col < order.order; ++col) {
+            mvwaddch(window, y, x + (col * order.order * ((order.order * NUM_SPACING) + 1)), ACS_TTEE);
+            mvwaddch(window, y + (order.order2 * (order.order + 1)), x + (col * order.order * ((order.order * NUM_SPACING) + 1)), ACS_BTEE);
         }
         attroff(COLOR_PAIR(MAIN_GRID_COLOUR));
     }
@@ -200,43 +201,37 @@ namespace cursudsol {
                                const int dataX) {
         // Draw lines
         attron(COLOR_PAIR(SUB_GRID_COLOUR));
-        for (int row = 1; row < Order::order; ++row) {
-            for (int col = 1; col < Order::order; ++col) {
-                mvwhline(window, y + (row * (Order::order + 1)), x + 1, ACS_HLINE, (Order::order * ((Order::order * NUM_SPACING) + 1)) - 1);
-                mvwvline(window, y + 1, x + (col * ((Order::order * NUM_SPACING) + 1)), ACS_VLINE, (Order::order * (Order::order + 1)) - 1);
+        for (IntType row = 1; row < order.order; ++row) {
+            for (IntType col = 1; col < order.order; ++col) {
+                mvwhline(window, y + (row * (order.order + 1)), x + 1, ACS_HLINE, (order.order * ((order.order * NUM_SPACING) + 1)) - 1);
+                mvwvline(window, y + 1, x + (col * ((order.order * NUM_SPACING) + 1)), ACS_VLINE, (order.order * (order.order + 1)) - 1);
             }
         }
 
         // Draw centres
-        for (int row = 1; row < Order::order; ++row) {
-            for (int col = 1; col < Order::order; ++col) {
-                mvwaddch(window, y + (row * (Order::order + 1)), x + (col * ((Order::order * NUM_SPACING) + 1)), ACS_PLUS);
+        for (IntType row = 1; row < order.order; ++row) {
+            for (IntType col = 1; col < order.order; ++col) {
+                mvwaddch(window, y + (row * (order.order + 1)), x + (col * ((order.order * NUM_SPACING) + 1)), ACS_PLUS);
             }
         }
         attroff(COLOR_PAIR(SUB_GRID_COLOUR));
 
         // Draw pencil marks
         attron(COLOR_PAIR(NUM_COLOUR));
-        // for (int row = 0; row < 1; ++row) {
-        //     for (int col = 0; col < 1; ++col) {
-        for (int row = 0; row < Order::order; ++row) {
-            for (int col = 0; col < Order::order; ++col) {
-                Cell* cell = grid.getFlatData() + dataX + col + ((dataY + row) * Order::orderSq);
+        for (IntType row = 0; row < order.order; ++row) {
+            for (IntType col = 0; col < order.order; ++col) {
+                Cell* cell = grid.getFlatData()[dataX + col + ((dataY + row) * order.order2)];
 
                 if (cell->isFound()) {
                     attron(COLOR_PAIR(FOUND_COLOUR));
-                    drawBigNum(window, y + (row * (Order::order + 1)) + 1, x + (col * ((Order::order * NUM_SPACING) + 1)) + 1, cell->getValue());
-                    // mvwaddch(window,
-                    //          y + (row * (Order::order + 1)) + ((Order::orderSq / 2) / Order::order) + 1,
-                    //          x + (col * (Order::order + 1)) + ((Order::orderSq / 2) % Order::order) + 1,
-                    //          cell->getValue() + 48 + 1);
+                    drawBigNum(window, y + (row * (order.order + 1)) + 1, x + (col * ((order.order * NUM_SPACING) + 1)) + 1, cell->getValue());
                     attroff(COLOR_PAIR(FOUND_COLOUR));
                 } else {
-                    for (int num = 0; num < Order::orderSq; ++num) {
+                    for (IntType num = 0; num < order.order2; ++num) {
                         if (cell->containsPencilMark(num)) {
                             mvwaddch(window,
-                                    y + (row * (Order::order + 1)) + (num / Order::order) + 1,
-                                    x + (col * ((Order::order * NUM_SPACING) + 1)) + ((num % Order::order) * NUM_SPACING) + 1 + 1,
+                                    y + (row * (order.order + 1)) + (num / order.order) + 1,
+                                    x + (col * ((order.order * NUM_SPACING) + 1)) + ((num % order.order) * NUM_SPACING) + 1 + 1,
                                     num + 48 + 1);
                         }
                     }
@@ -251,13 +246,13 @@ namespace cursudsol {
                           const int x) {
         drawOuterGrid(window, y, x);
 
-        for (int row = 0; row < Order::order; ++row) {
-            for (int col = 0; col < Order::order; ++col) {
+        for (IntType row = 0; row < order.order; ++row) {
+            for (IntType col = 0; col < order.order; ++col) {
                 drawInnerGrid(window,
-                              y + (row * Order::order * (Order::order + 1)),
-                              x + (col * Order::order * ((Order::order * NUM_SPACING) + 1)),
-                              row * Order::order,
-                              col * Order::order);
+                              y + (row * order.order * (order.order + 1)),
+                              x + (col * order.order * ((order.order * NUM_SPACING) + 1)),
+                              row * order.order,
+                              col * order.order);
             }
         }
     }

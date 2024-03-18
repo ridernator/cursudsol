@@ -1,100 +1,87 @@
 #include "Grid.h"
+#include "Cell.h"
 #include "Direction.h"
 #include "Group.h"
 #include "Order.h"
-#include <cstdlib>
 
 namespace cursudsol {
-    Grid::Grid(const char* initialGrid) {
-        for (std::uint_fast8_t index = 0; index < Order::orderSq * Order::orderSq; ++index) {
-            if ((*(initialGrid + index) > '0') && (*(initialGrid + index) - 48 <= Order::orderSq)) {
-                (flatData + index)->setValue((*(initialGrid + index) - 48) - 1);
+    Grid::Grid(const Order& order,
+               const std::string& initialGrid) : order(order) {
+        flatData = new Cell*[order.order4];
+
+        for (IntType index = 0; index < order.order4; ++index) {
+            flatData[index] = new Cell(order);
+            if ((initialGrid[index] > '0') && ((IntType) initialGrid[index] - 48 <= order.order2)) {
+                flatData[index]->setValue((initialGrid[index] - 48) - 1);
             }
         }
 
         // Create start of rows, columns and blocks
-        for (std::uint_fast8_t index = 0; index < Order::orderSq; ++index) {
-            *(*(groups + Group::ROW) + index) = flatData + (index * Order::orderSq);
-            *(*(groups + Group::COLUMN) + index) = flatData + index;
+        for (IntType index = 0; index < order.order2; ++index) {
+            groups[Group::ROW].push_back(flatData[index * order.order2]);
+            groups[Group::COLUMN].push_back(flatData[index]);
 
-            int blockStartRow = Order::order * (index / Order::order);
-            int blockStartCol = Order::order * (index % Order::order);
-            *(*(groups + Group::BLOCK) + index) = flatData + blockStartCol + (blockStartRow * Order::orderSq);
+            int blockStartRow = order.order * (index / order.order);
+            int blockStartCol = order.order * (index % order.order);
+            groups[Group::BLOCK].push_back(flatData[blockStartCol + (blockStartRow * order.order2)]);
         }
 
         // Link cells
-        for (std::uint_fast8_t index = 0; index < Order::orderSq * Order::orderSq; ++index) {
+        for (IntType index = 0; index < order.order4; ++index) {
             // Rows
-            if (index % Order::orderSq != Order::orderSq - 1) {
-                (flatData + index)->setDirectionInGroup(Direction::NEXT, Group::ROW, flatData + index + 1);
+            if (index % order.order2 != order.order2 - 1) {
+                flatData[index]->setNeighbour(Direction::NEXT, Group::ROW, flatData[index + 1]);
             }
 
-            if (index % Order::orderSq != 0) {
-                (flatData + index)->setDirectionInGroup(Direction::PREVIOUS, Group::ROW, flatData + index - 1);
+            if (index % order.order2 != 0) {
+                flatData[index]->setNeighbour(Direction::PREVIOUS, Group::ROW, flatData[index - 1]);
             }
 
             // Columns
-            if (index < Order::orderSq * (Order::orderSq - 1)) {
-                (flatData + index)->setDirectionInGroup(Direction::NEXT, Group::COLUMN, flatData + index + Order::orderSq);
+            if (index < order.order2 * (order.order2 - 1)) {
+                flatData[index]->setNeighbour(Direction::NEXT, Group::COLUMN, flatData[index + order.order2]);
             }
 
-            if (index >= Order::orderSq) {
-                (flatData + index)->setDirectionInGroup(Direction::PREVIOUS, Group::COLUMN, flatData + index - Order::orderSq);
+            if (index >= order.order2) {
+                flatData[index]->setNeighbour(Direction::PREVIOUS, Group::COLUMN, flatData[index - order.order2]);
             }
 
             // Blocks
-            if (index % Order::order == Order::order - 1) {
-                if ((index / Order::orderSq) % Order::order != Order::order - 1) {
-                    (flatData + index)->setDirectionInGroup(Direction::NEXT, Group::BLOCK, flatData + index + Order::orderSq - (Order::order - 1));
+            if (index % order.order == order.order - 1) {
+                if ((index / order.order2) % order.order != order.order - 1) {
+                    flatData[index]->setNeighbour(Direction::NEXT, Group::BLOCK, flatData[index + order.order2 - (order.order - 1)]);
                 }
             } else {
-                (flatData + index)->setDirectionInGroup(Direction::NEXT, Group::BLOCK, (flatData + index)->getDirectionInGroup(Direction::NEXT, Group::ROW));
+                flatData[index]->setNeighbour(Direction::NEXT, Group::BLOCK, flatData[index]->getNeighbour(Direction::NEXT, Group::ROW));
             }
 
-            if (index % Order::order == 0) {
-                if ((index / Order::orderSq) % Order::order != 0) {
-                    (flatData + index)->setDirectionInGroup(Direction::PREVIOUS, Group::BLOCK, flatData + index - Order::orderSq + (Order::order - 1));
+            if (index % order.order == 0) {
+                if ((index / order.order2) % order.order != 0) {
+                    flatData[index]->setNeighbour(Direction::PREVIOUS, Group::BLOCK, flatData[index - order.order2 + (order.order - 1)]);
                 }
             } else {
-                (flatData + index)->setDirectionInGroup(Direction::PREVIOUS, Group::BLOCK, (flatData + index)->getDirectionInGroup(Direction::PREVIOUS, Group::ROW));
+                flatData[index]->setNeighbour(Direction::PREVIOUS, Group::BLOCK, flatData[index]->getNeighbour(Direction::PREVIOUS, Group::ROW));
             }
         }
     }
 
-    Cell* Grid::getFlatData() {
+    Grid::~Grid() {
+        for (IntType index = 0; index < order.order4; ++index) {
+            delete flatData[index];
+        }
+
+        delete [] flatData;
+    }
+
+    Cell** Grid::getFlatData() {
         return flatData;
     }
 
-    Cell* Grid::getGroup(const Group group,
-                         const std::size_t index) {
-        return *(getGroups(group) + index);
+    std::vector<Cell*>& Grid::getGroups(const Group group) {
+        return groups[group];
     }
 
-    Cell** Grid::getGroups(const Group group) {
-        return *(groups + group);
-    }
-
-    Cell* Grid::getRow(const std::size_t index) {
-        return getGroup(Group::ROW, index);
-    }
-
-    Cell** Grid::getRows() {
-        return getGroups(Group::ROW);
-    }
-
-    Cell* Grid::getColumn(const std::size_t index) {
-        return getGroup(Group::COLUMN, index);
-    }
-
-    Cell** Grid::getColumns() {
-        return getGroups(Group::COLUMN);
-    }
-
-    Cell* Grid::getBlock(const std::size_t index) {
-        return getGroup(Group::BLOCK, index);
-    }
-
-    Cell** Grid::getBlocks() {
-        return getGroups(Group::BLOCK);
+    const Order& Grid::getOrder() const {
+        return order;
     }
 }

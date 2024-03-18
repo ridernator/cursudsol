@@ -2,21 +2,21 @@
 #include "Direction.h"
 #include "Group.h"
 #include "Order.h"
-#include <cstdint>
 
 namespace cursudsol {
     bool CandidateRemoval::solveStep(Grid& grid,
                                      const bool greedy) {
         bool returnVal = false;
+        Cell* cell;
+        Cell* testCell;
 
-        for (std::uint_fast8_t index = 0; index < Order::orderSq * Order::orderSq; ++index) {
-            Cell* cell = grid.getFlatData() + index;
-            Cell* testCell;
+        for (IntType index = 0; index < grid.getOrder().order4; ++index) {
+            cell = grid.getFlatData()[index];
 
             if (cell->isFound()) {
                 for (const auto& direction : ALL_DIRECTIONS) {
                     for (const auto& group : ALL_GROUPS) {
-                        testCell = cell->getDirectionInGroup(direction, group);
+                        testCell = cell->getNeighbour(direction, group);
 
                         while (testCell != nullptr) {
                             if (testCell->containsPencilMark(cell->getValue())) {
@@ -29,7 +29,7 @@ namespace cursudsol {
                                 }
                             }
 
-                            testCell = testCell->getDirectionInGroup(direction, group);
+                            testCell = testCell->getNeighbour(direction, group);
                         }
                     }
                 }
