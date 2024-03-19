@@ -11,14 +11,10 @@ namespace cursudsol {
         public:
             CurSudSol(const std::string& initialGrid);
 
-            void draw();
-
-            bool solveStep();
-
         private:
             Order order;
             Grid grid;
-            Drawer drawer;
             Solver solver;
+            Drawer drawer;
     };
 }

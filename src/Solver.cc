@@ -20,7 +20,7 @@ namespace cursudsol {
 
     bool Solver::solveStep() {
         for (const auto& rule : rules) {
-            if (rule->solveStep(grid)) {
+            if (rule->solveStep(grid, false)) {
                 return true;
             }
         }

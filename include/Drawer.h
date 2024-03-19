@@ -2,13 +2,15 @@
 
 #include "Grid.h"
 #include "Order.h"
+#include "Solver.h"
 
 #include <ncurses.h>
 
 namespace cursudsol {
     class Drawer {
         public:
-            Drawer(Grid& grid);
+            Drawer(Grid& grid,
+                   Solver& solver);
             ~Drawer();
 
             void draw();
@@ -45,6 +47,7 @@ namespace cursudsol {
                             const int x,
                             const IntType num);
             Grid& grid;
+            Solver& solver;
 
             const Order& order;
     };

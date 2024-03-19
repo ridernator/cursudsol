@@ -4,8 +4,10 @@
 #include <ncurses.h>
 
 namespace cursudsol {
-    Drawer::Drawer(Grid& grid) : grid(grid),
-                                 order(grid.getOrder()) {
+    Drawer::Drawer(Grid& grid,
+                   Solver& solver) : grid(grid),
+                                     solver(solver),
+                                     order(grid.getOrder()) {
         initscr();
         raw();
         keypad(stdscr, TRUE);
@@ -21,11 +23,17 @@ namespace cursudsol {
     }
 
     void Drawer::draw() {
-        clear();
+        while (true) {
+            drawGrid(0, 0);
 
-        drawGrid(0, 0);
+            refresh();
 
-        refresh();
+            if (getch() == 'q') {
+                break;
+            }
+
+            solver.solveStep();
+        }
     }
 
     void Drawer::initColours() {
@@ -233,6 +241,11 @@ namespace cursudsol {
                                     y + (row * (order.order + 1)) + (num / order.order) + 1,
                                     x + (col * ((order.order * NUM_SPACING) + 1)) + ((num % order.order) * NUM_SPACING) + 1 + 1,
                                     num + 48 + 1);
+                        } else {
+                            mvwaddch(window,
+                                    y + (row * (order.order + 1)) + (num / order.order) + 1,
+                                    x + (col * ((order.order * NUM_SPACING) + 1)) + ((num % order.order) * NUM_SPACING) + 1 + 1,
+                                    ' ');
                         }
                     }
                 }

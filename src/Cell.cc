@@ -67,4 +67,18 @@ namespace cursudsol {
     IntType Cell::getValue() const {
         return value;
     }
+
+    void Cell::initSeenCells() {
+        for (const auto& direction : ALL_DIRECTIONS) {
+            for (const auto& group : ALL_GROUPS) {
+                Cell* cell = getNeighbour(direction, group);
+
+                while (cell != nullptr) {
+                    seenCells.insert(cell);
+
+                    cell = cell->getNeighbour(direction, group);
+                }
+            }
+        }
+    }
 }

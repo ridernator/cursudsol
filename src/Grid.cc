@@ -63,6 +63,11 @@ namespace cursudsol {
                 flatData[index]->setNeighbour(Direction::PREVIOUS, Group::BLOCK, flatData[index]->getNeighbour(Direction::PREVIOUS, Group::ROW));
             }
         }
+
+        // Calculate seen cells
+        for (IntType index = 0; index < order.order4; ++index) {
+            flatData[index]->initSeenCells();
+        }
     }
 
     Grid::~Grid() {

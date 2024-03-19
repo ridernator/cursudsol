@@ -19,7 +19,8 @@ namespace cursudsol {
                         testCell = cell->getNeighbour(direction, group);
 
                         while (testCell != nullptr) {
-                            if (testCell->containsPencilMark(cell->getValue())) {
+                            if ((!testCell->isFound()) &&
+                                (testCell->containsPencilMark(cell->getValue()))) {
                                 testCell->removePencilMark(cell->getValue());
 
                                 if (greedy) {

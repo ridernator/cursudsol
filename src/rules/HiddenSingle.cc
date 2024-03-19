@@ -21,13 +21,12 @@ namespace cursudsol {
 
                     // Count pencil marks with this number in the group
                     while (looper != nullptr) {
-                        if (!looper->isFound()) {
-                            if (looper->containsPencilMark(num)) {
-                                candidate = looper;
+                        if ((!looper->isFound()) &&
+                            (looper->containsPencilMark(num))) {
+                            candidate = looper;
 
-                                if (++count > 1) {
-                                    break;
-                                }
+                            if (++count > 1) {
+                                break;
                             }
                         }
 
@@ -41,10 +40,12 @@ namespace cursudsol {
                             }
                         }
 
+                        candidate->solve();
+
                         if (greedy) {
                             returnVal = true;
                         } else {
-                            return candidate->solve();
+                            return true;
                         }
                     }
                 }

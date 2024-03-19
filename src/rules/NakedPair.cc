@@ -55,13 +55,18 @@ namespace cursudsol {
                                             remover = cell;
 
                                             while (remover != nullptr) {
-                                                if ((remover != cell1) &&
+                                                if ((!remover->isFound()) &&
+                                                    (remover != cell1) &&
                                                     (remover != cell2) &&
                                                     (remover->containsPencilMark(remove))) {
                                                     remover->removePencilMark(remove);
 
-                                                    success = true;
-                                                    returnVal = true;
+                                                    if (greedy) {
+                                                        success = true;
+                                                        returnVal = true;
+                                                    } else {
+                                                        return true;
+                                                    }
                                                 }
 
                                                 remover = remover->getNeighbour(Direction::NEXT, group);
@@ -75,10 +80,6 @@ namespace cursudsol {
 
                             cell2 = cell2->getNeighbour(Direction::NEXT, group);
                         }
-                    }
-
-                    if ((returnVal) && (!greedy)) {
-                        return true;
                     }
 
                     if (success) {

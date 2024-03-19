@@ -5,6 +5,7 @@
 #include "Order.h"
 
 #include <map>
+#include <set>
 
 namespace cursudsol {
     class Cell{
@@ -32,6 +33,8 @@ namespace cursudsol {
 
             IntType getValue() const;
 
+            void initSeenCells();
+
         private:
             const Order& order;
 
@@ -40,5 +43,7 @@ namespace cursudsol {
             std::map<IntType, bool> pencilMarks;
 
             std::map<Direction, std::map<Group, Cell*>> neighbours;
+
+            std::set<Cell*> seenCells;
     };
 }
