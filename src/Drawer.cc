@@ -1,5 +1,9 @@
 #include "Drawer.h"
 #include "Order.h"
+#include "Rule.h"
+#include "Solver.h"
+
+#include <algorithm>
 #include <cstdint>
 #include <ncurses.h>
 
@@ -23,8 +27,10 @@ namespace cursudsol {
     }
 
     void Drawer::draw() {
+        SolverReturn solverReturn;
+
         while (true) {
-            drawGrid(0, 0);
+            drawGrid(0, 0, solverReturn);
 
             refresh();
 
@@ -32,7 +38,7 @@ namespace cursudsol {
                 break;
             }
 
-            solver.solveStep();
+            solverReturn = solver.solveStep();
         }
     }
 
@@ -44,6 +50,8 @@ namespace cursudsol {
             init_pair(SUB_GRID_COLOUR,  COLOR_BLUE,  COLOR_BLACK);
             init_pair(NUM_COLOUR,       COLOR_WHITE, COLOR_BLACK);
             init_pair(FOUND_COLOUR,     COLOR_BLACK, COLOR_GREEN);
+            init_pair(REMOVED_COLOUR,   COLOR_BLACK, COLOR_RED);
+            init_pair(BECAUSE_COLOUR,   COLOR_BLACK, COLOR_BLUE);
         }
     }
 
@@ -206,7 +214,8 @@ namespace cursudsol {
                                const int y,
                                const int x,
                                const int dataY,
-                               const int dataX) {
+                               const int dataX,
+                               SolverReturn& solverReturn) {
         // Draw lines
         attron(COLOR_PAIR(SUB_GRID_COLOUR));
         for (IntType row = 1; row < order.order; ++row) {
@@ -237,15 +246,28 @@ namespace cursudsol {
                 } else {
                     for (IntType num = 0; num < order.order2; ++num) {
                         if (cell->containsPencilMark(num)) {
-                            mvwaddch(window,
-                                    y + (row * (order.order + 1)) + (num / order.order) + 1,
-                                    x + (col * ((order.order * NUM_SPACING) + 1)) + ((num % order.order) * NUM_SPACING) + 1 + 1,
-                                    num + 48 + 1);
+                            mvwprintw(window,
+                                      y + (row * (order.order + 1)) + (num / order.order) + 1,
+                                      x + (col * ((order.order * NUM_SPACING) + 1)) + ((num % order.order) * NUM_SPACING) + 1,
+                                      " %lu ",
+                                      num + 1);
                         } else {
-                            mvwaddch(window,
-                                    y + (row * (order.order + 1)) + (num / order.order) + 1,
-                                    x + (col * ((order.order * NUM_SPACING) + 1)) + ((num % order.order) * NUM_SPACING) + 1 + 1,
-                                    ' ');
+                            auto& removedPMs = std::get<1>(solverReturn);
+
+                            if (std::find(removedPMs[cell].begin(), removedPMs[cell].end(), num) == removedPMs[cell].end()) {
+                                mvwprintw(window,
+                                          y + (row * (order.order + 1)) + (num / order.order) + 1,
+                                          x + (col * ((order.order * NUM_SPACING) + 1)) + ((num % order.order) * NUM_SPACING) + 1,
+                                          "   ");
+                            } else {
+                                attron(COLOR_PAIR(REMOVED_COLOUR));
+                                mvwprintw(window,
+                                          y + (row * (order.order + 1)) + (num / order.order) + 1,
+                                          x + (col * ((order.order * NUM_SPACING) + 1)) + ((num % order.order) * NUM_SPACING) + 1,
+                                          " %lu ",
+                                          num + 1);
+                                attroff(COLOR_PAIR(REMOVED_COLOUR));
+                            }
                         }
                     }
                 }
@@ -256,7 +278,8 @@ namespace cursudsol {
 
     void Drawer::drawGrid(WINDOW* window,
                           const int y,
-                          const int x) {
+                          const int x,
+                          SolverReturn& solverReturn) {
         drawOuterGrid(window, y, x);
 
         for (IntType row = 0; row < order.order; ++row) {
@@ -265,13 +288,15 @@ namespace cursudsol {
                               y + (row * order.order * (order.order + 1)),
                               x + (col * order.order * ((order.order * NUM_SPACING) + 1)),
                               row * order.order,
-                              col * order.order);
+                              col * order.order,
+                              solverReturn);
             }
         }
     }
 
     void Drawer::drawGrid(const int y,
-                          const int x) {
-        drawGrid(stdscr, y, x);
+                          const int x,
+                          SolverReturn& solverReturn) {
+        drawGrid(stdscr, y, x, solverReturn);
     }
 }

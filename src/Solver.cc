@@ -1,5 +1,6 @@
 #include "Solver.h"
 #include "CandidateRemoval.h"
+#include "Rule.h"
 #include "NakedPair.h"
 #include "NakedSingle.h"
 #include "HiddenSingle.h"
@@ -18,13 +19,17 @@ namespace cursudsol {
         }
     }
 
-    bool Solver::solveStep() {
+    SolverReturn Solver::solveStep() {
+        SolverReturn returnVal;
+
         for (const auto& rule : rules) {
-            if (rule->solveStep(grid, false)) {
-                return true;
+            returnVal = rule->solveStep(grid, true);
+
+            if (std::get<0>(returnVal)) {
+               break;
             }
         }
 
-        return false;
+        return returnVal;
     }
 }

@@ -12,7 +12,7 @@ namespace cursudsol {
             Solver(Grid& grid);
             ~Solver();
 
-            bool solveStep();
+            SolverReturn solveStep();
 
         private:
             Grid& grid;

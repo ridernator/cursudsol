@@ -2,11 +2,12 @@
 #include "Direction.h"
 #include "Group.h"
 #include "Order.h"
+#include "Rule.h"
 
 namespace cursudsol {
-    bool NakedPair::solveStep(Grid& grid,
+    SolverReturn NakedPair::solveStep(Grid& grid,
                               const bool greedy) {
-        bool returnVal;
+        SolverReturn returnVal(false, {}, {});
         bool success;
         bool thirdMatch;
 
@@ -61,11 +62,15 @@ namespace cursudsol {
                                                     (remover->containsPencilMark(remove))) {
                                                     remover->removePencilMark(remove);
 
+                                                    std::get<0>(returnVal) = true;
+                                                    std::get<1>(returnVal)[remover].push_back(remove);
+                                                    std::get<2>(returnVal)[cell1].push_back(remove);
+                                                    std::get<2>(returnVal)[cell2].push_back(remove);
+
                                                     if (greedy) {
                                                         success = true;
-                                                        returnVal = true;
                                                     } else {
-                                                        return true;
+                                                        return returnVal;
                                                     }
                                                 }
 

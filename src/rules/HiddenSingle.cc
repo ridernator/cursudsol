@@ -1,21 +1,20 @@
 #include "HiddenSingle.h"
 #include "Group.h"
 #include "Order.h"
-
-#include <cstdint>
+#include "Rule.h"
 
 namespace cursudsol {
-    bool HiddenSingle::solveStep(Grid& grid,
-                                 const bool greedy) {
+    SolverReturn HiddenSingle::solveStep(Grid& grid,
+                                         const bool) {
         const Order& order = grid.getOrder();
-        bool returnVal = false;
+        SolverReturn returnVal(false, {}, {});
         Cell* looper;
         Cell* candidate;
         IntType count;
 
         for (const auto& group : ALL_GROUPS) {
             for (const auto& cell : grid.getGroups(group)) {
-                for (std::uint_fast8_t num = 0; num < order.order2; ++num) {
+                for (IntType num = 0; num < order.order2; ++num) {
                     looper = cell;
                     count = 0;
 
@@ -39,14 +38,11 @@ namespace cursudsol {
                                 candidate->removePencilMark(otherNum);
                             }
                         }
-
                         candidate->solve();
 
-                        if (greedy) {
-                            returnVal = true;
-                        } else {
-                            return true;
-                        }
+                        std::get<0>(returnVal) = true;
+
+                        return returnVal;
                     }
                 }
             }

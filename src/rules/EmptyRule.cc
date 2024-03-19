@@ -1,9 +1,10 @@
 #include "EmptyRule.h"
+#include "Rule.h"
 
 namespace cursudsol {
-    bool EmptyRule::solveStep(Grid&,
-                              const bool) {
-        bool returnVal = false;
+    SolverReturn EmptyRule::solveStep(Grid&,
+                                      const bool) {
+        SolverReturn returnVal(false, {}, {});
 
         return returnVal;
     }

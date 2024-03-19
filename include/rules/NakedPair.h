@@ -7,8 +7,8 @@
 namespace cursudsol {
     class NakedPair : public Rule {
         public:
-            bool solveStep(Grid& grid,
-                           const bool greedy = true) override;
+            SolverReturn solveStep(Grid& grid,
+                                   const bool greedy = true) override;
 
         private:
             bool comparePencilMarks(Cell* a,

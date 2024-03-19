@@ -2,11 +2,12 @@
 #include "Direction.h"
 #include "Group.h"
 #include "Order.h"
+#include "Rule.h"
 
 namespace cursudsol {
-    bool CandidateRemoval::solveStep(Grid& grid,
-                                     const bool greedy) {
-        bool returnVal = false;
+    SolverReturn CandidateRemoval::solveStep(Grid& grid,
+                                             const bool greedy) {
+        SolverReturn returnVal(false, {}, {});
         Cell* cell;
         Cell* testCell;
 
@@ -23,10 +24,11 @@ namespace cursudsol {
                                 (testCell->containsPencilMark(cell->getValue()))) {
                                 testCell->removePencilMark(cell->getValue());
 
-                                if (greedy) {
-                                    returnVal = true;
-                                } else {
-                                    return true;
+                                std::get<0>(returnVal) = true;
+                                std::get<1>(returnVal)[testCell].push_back(cell->getValue());
+
+                                if (!greedy) {
+                                    return returnVal;
                                 }
                             }
 

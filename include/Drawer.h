@@ -2,6 +2,7 @@
 
 #include "Grid.h"
 #include "Order.h"
+#include "Rule.h"
 #include "Solver.h"
 
 #include <ncurses.h>
@@ -20,6 +21,8 @@ namespace cursudsol {
             static const int SUB_GRID_COLOUR  = 2;
             static const int NUM_COLOUR       = 3;
             static const int FOUND_COLOUR     = 4;
+            static const int REMOVED_COLOUR   = 5;
+            static const int BECAUSE_COLOUR   = 6;
 
             static const int NUM_SPACING = 3;
 
@@ -33,14 +36,17 @@ namespace cursudsol {
                                const int y,
                                const int x,
                                const int dataY,
-                               const int dataX);
+                               const int dataX,
+                               SolverReturn& solverReturn);
 
             void drawGrid(WINDOW* window,
                           const int y,
-                          const int x);
+                          const int x,
+                          SolverReturn& solverReturn);
 
             void drawGrid(const int y,
-                          const int x);
+                          const int x,
+                          SolverReturn& solverReturn);
 
             void drawBigNum(WINDOW* window,
                             const int y,

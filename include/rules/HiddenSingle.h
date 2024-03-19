@@ -6,7 +6,7 @@
 namespace cursudsol {
     class HiddenSingle : public Rule {
         public:
-            bool solveStep(Grid& grid,
-                           const bool greedy = true) override;
+            SolverReturn solveStep(Grid& grid,
+                                   const bool greedy = true) override;
     };
 }
