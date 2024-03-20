@@ -11,6 +11,7 @@ namespace cursudsol {
             if (!grid.getFlatData()[index]->isFound()) {
                 if (grid.getFlatData()[index]->solve()) {
                     std::get<0>(returnVal) = true;
+                    std::get<2>(returnVal)[grid.getFlatData()[index]];
 
                     if (!greedy) {
                         break;

@@ -4,12 +4,12 @@
 #include "Grid.h"
 #include "Order.h"
 
+#include <set>
 #include <tuple>
 #include <map>
-#include <vector>
 
 namespace cursudsol {
-    typedef std::tuple<bool, std::map<Cell*, std::vector<IntType>>, std::map<Cell*, std::vector<IntType>>> SolverReturn;
+    typedef std::tuple<bool, std::map<Cell*, std::set<IntType>>, std::map<Cell*, std::set<IntType>>> SolverReturn;
 
     class Rule {
         public:

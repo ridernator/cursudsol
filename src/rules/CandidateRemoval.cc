@@ -18,7 +18,8 @@ namespace cursudsol {
                         testCell->removePencilMark(cell->getValue());
 
                         std::get<0>(returnVal) = true;
-                        std::get<1>(returnVal)[testCell].push_back(cell->getValue());
+                        std::get<1>(returnVal)[testCell].insert(cell->getValue());
+                        std::get<2>(returnVal)[cell];
 
                         if (!greedy) {
                             return returnVal;

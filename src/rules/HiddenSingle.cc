@@ -41,6 +41,7 @@ namespace cursudsol {
                         candidate->solve();
 
                         std::get<0>(returnVal) = true;
+                        std::get<2>(returnVal)[candidate];
 
                         return returnVal;
                     }

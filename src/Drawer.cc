@@ -235,31 +235,43 @@ namespace cursudsol {
 
         // Draw pencil marks
         attron(COLOR_PAIR(NUM_COLOUR));
+        auto& removedPMs = std::get<1>(solverReturn);
+        auto& becausePMs = std::get<2>(solverReturn);
+
         for (IntType row = 0; row < order.order; ++row) {
             for (IntType col = 0; col < order.order; ++col) {
                 Cell* cell = grid.getFlatData()[dataX + col + ((dataY + row) * order.order2)];
 
                 if (cell->isFound()) {
-                    attron(COLOR_PAIR(FOUND_COLOUR));
-                    drawBigNum(window, y + (row * (order.order + 1)) + 1, x + (col * ((order.order * NUM_SPACING) + 1)) + 1, cell->getValue());
-                    attroff(COLOR_PAIR(FOUND_COLOUR));
+                    if (becausePMs.contains(cell)) {
+                        attron(COLOR_PAIR(BECAUSE_COLOUR));
+                        drawBigNum(window, y + (row * (order.order + 1)) + 1, x + (col * ((order.order * NUM_SPACING) + 1)) + 1, cell->getValue());
+                        attroff(COLOR_PAIR(BECAUSE_COLOUR));
+                    } else {
+                        attron(COLOR_PAIR(FOUND_COLOUR));
+                        drawBigNum(window, y + (row * (order.order + 1)) + 1, x + (col * ((order.order * NUM_SPACING) + 1)) + 1, cell->getValue());
+                        attroff(COLOR_PAIR(FOUND_COLOUR));
+                    }
                 } else {
                     for (IntType num = 0; num < order.order2; ++num) {
                         if (cell->containsPencilMark(num)) {
-                            mvwprintw(window,
-                                      y + (row * (order.order + 1)) + (num / order.order) + 1,
-                                      x + (col * ((order.order * NUM_SPACING) + 1)) + ((num % order.order) * NUM_SPACING) + 1,
-                                      " %lu ",
-                                      num + 1);
-                        } else {
-                            auto& removedPMs = std::get<1>(solverReturn);
-
-                            if (std::find(removedPMs[cell].begin(), removedPMs[cell].end(), num) == removedPMs[cell].end()) {
+                            if (std::find(becausePMs[cell].begin(), becausePMs[cell].end(), num) != becausePMs[cell].end()) {
+                                attron(COLOR_PAIR(BECAUSE_COLOUR));
                                 mvwprintw(window,
                                           y + (row * (order.order + 1)) + (num / order.order) + 1,
                                           x + (col * ((order.order * NUM_SPACING) + 1)) + ((num % order.order) * NUM_SPACING) + 1,
-                                          "   ");
+                                          " %lu ",
+                                          num + 1);
+                                attroff(COLOR_PAIR(BECAUSE_COLOUR));
                             } else {
+                                mvwprintw(window,
+                                          y + (row * (order.order + 1)) + (num / order.order) + 1,
+                                          x + (col * ((order.order * NUM_SPACING) + 1)) + ((num % order.order) * NUM_SPACING) + 1,
+                                          " %lu ",
+                                          num + 1);
+                            }
+                        } else {
+                            if (std::find(removedPMs[cell].begin(), removedPMs[cell].end(), num) != removedPMs[cell].end()) {
                                 attron(COLOR_PAIR(REMOVED_COLOUR));
                                 mvwprintw(window,
                                           y + (row * (order.order + 1)) + (num / order.order) + 1,
@@ -267,6 +279,11 @@ namespace cursudsol {
                                           " %lu ",
                                           num + 1);
                                 attroff(COLOR_PAIR(REMOVED_COLOUR));
+                            } else {
+                                mvwprintw(window,
+                                          y + (row * (order.order + 1)) + (num / order.order) + 1,
+                                          x + (col * ((order.order * NUM_SPACING) + 1)) + ((num % order.order) * NUM_SPACING) + 1,
+                                          "   ");
                             }
                         }
                     }

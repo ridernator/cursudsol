@@ -63,9 +63,9 @@ namespace cursudsol {
                                                     remover->removePencilMark(remove);
 
                                                     std::get<0>(returnVal) = true;
-                                                    std::get<1>(returnVal)[remover].push_back(remove);
-                                                    std::get<2>(returnVal)[cell1].push_back(remove);
-                                                    std::get<2>(returnVal)[cell2].push_back(remove);
+                                                    std::get<1>(returnVal)[remover].insert(remove);
+                                                    std::get<2>(returnVal)[cell1].insert(remove);
+                                                    std::get<2>(returnVal)[cell2].insert(remove);
 
                                                     if (greedy) {
                                                         success = true;
