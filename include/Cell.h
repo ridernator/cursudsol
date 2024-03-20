@@ -35,6 +35,8 @@ namespace cursudsol {
 
             void initSeenCells();
 
+            std::set<Cell*>& getSeenCells();
+
         private:
             const Order& order;
 

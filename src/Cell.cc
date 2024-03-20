@@ -81,4 +81,8 @@ namespace cursudsol {
             }
         }
     }
+
+    std::set<Cell*>& Cell::getSeenCells() {
+        return seenCells;
+    }
 }
