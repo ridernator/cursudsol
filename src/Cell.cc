@@ -12,8 +12,8 @@ namespace cursudsol {
             pencilMarks[index] = true;
         }
 
-        for (const auto& direction : ALL_DIRECTIONS) {
-            for (const auto& group : ALL_GROUPS) {
+        for (const Direction direction : ALL_DIRECTIONS) {
+            for (const Group group : ALL_GROUPS) {
                 neighbours[direction][group] = nullptr;
             }
         }
@@ -69,14 +69,10 @@ namespace cursudsol {
     }
 
     void Cell::initSeenCells() {
-        for (const auto& direction : ALL_DIRECTIONS) {
-            for (const auto& group : ALL_GROUPS) {
-                Cell* cell = getNeighbour(direction, group);
-
-                while (cell != nullptr) {
+        for (const Direction direction : ALL_DIRECTIONS) {
+            for (const Group group : ALL_GROUPS) {
+                for (Cell* cell = getNeighbour(direction, group); cell != nullptr; cell = cell->getNeighbour(direction, group)) {
                     seenCells.insert(cell);
-
-                    cell = cell->getNeighbour(direction, group);
                 }
             }
         }

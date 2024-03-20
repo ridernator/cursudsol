@@ -6,37 +6,26 @@
 
 namespace cursudsol {
     SolverReturn NakedPair::solveStep(Grid& grid,
-                              const bool greedy) {
+                                      const bool greedy) {
         SolverReturn returnVal(false, {}, {});
         bool success;
         bool thirdMatch;
 
-        Cell* cell1;
-        Cell* cell2;
-        Cell* badCell;
-        Cell* remover;
-
         const Order& order = grid.getOrder();
 
-        for (const auto& group : ALL_GROUPS) {
-            for (const auto& cell : grid.getGroups(group)) {
-                cell1 = cell;
-
-                while (cell1 != nullptr) {
+        for (const Group group : ALL_GROUPS) {
+            for (Cell* groupStart : grid.getGroups(group)) {
+                for (Cell* cell1 = groupStart; cell1 != nullptr; cell1 = cell1->getNeighbour(Direction::NEXT, group)) {
                     success = false;
 
                     if ((!cell1->isFound()) && (cell1->countPencilMarks() == 2)) {
-                        cell2 = cell1->getNeighbour(Direction::NEXT, group);
-
-                        while (cell2 != nullptr) {
+                        for (Cell* cell2 = cell1->getNeighbour(Direction::NEXT, group); cell2 != nullptr; cell2 = cell2->getNeighbour(Direction::NEXT, group)) {
                             if ((!cell2->isFound()) &&
                                 (cell2->countPencilMarks() == 2) &&
                                 (comparePencilMarks(cell2, cell1, order.order2))) {
                                 // Found matching pair. Now check there aren't any others
-                                badCell = cell2->getNeighbour(Direction::NEXT, group);
                                 thirdMatch = false;
-
-                                while (badCell != nullptr) {
+                                for (Cell* badCell = cell2->getNeighbour(Direction::NEXT, group); badCell != nullptr; badCell = badCell->getNeighbour(Direction::NEXT, group)) {
                                     if ((!badCell->isFound()) &&
                                         (badCell->countPencilMarks() == 2) &&
                                         (comparePencilMarks(badCell, cell1, order.order2))) {
@@ -45,17 +34,13 @@ namespace cursudsol {
 
                                         break;
                                     }
-
-                                    badCell = badCell->getNeighbour(Direction::NEXT, group);
                                 }
 
                                 if (!thirdMatch) {
                                     // Get rid
                                     for (IntType remove = 0; remove < order.order2; ++remove) {
                                         if (cell1->containsPencilMark(remove)) {
-                                            remover = cell;
-
-                                            while (remover != nullptr) {
+                                            for (Cell* remover = groupStart; remover != nullptr; remover = remover->getNeighbour(Direction::NEXT, group)) {
                                                 if ((!remover->isFound()) &&
                                                     (remover != cell1) &&
                                                     (remover != cell2) &&
@@ -73,8 +58,6 @@ namespace cursudsol {
                                                         return returnVal;
                                                     }
                                                 }
-
-                                                remover = remover->getNeighbour(Direction::NEXT, group);
                                             }
                                         }
                                     }
@@ -82,16 +65,12 @@ namespace cursudsol {
 
                                 break;
                             }
-
-                            cell2 = cell2->getNeighbour(Direction::NEXT, group);
                         }
                     }
 
                     if (success) {
                         break;
                     }
-
-                    cell1 = cell1->getNeighbour(Direction::NEXT, group);
                 }
             }
         }

@@ -59,7 +59,7 @@ namespace cursudsol {
                             const int y,
                             const int x,
                             const IntType num) {
-        for (std::uint_fast8_t index = 0; index < order.order; ++index) {
+        for (IntType index = 0; index < order.order; ++index) {
             mvwhline(window, y + index, x, ' ', order.order * NUM_SPACING);
         }
 

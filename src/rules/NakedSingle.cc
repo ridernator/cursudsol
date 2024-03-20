@@ -1,16 +1,14 @@
 #include "NakedSingle.h"
+#include "Direction.h"
 #include "Rule.h"
 
 namespace cursudsol {
     SolverReturn NakedSingle::solveStep(Grid& grid,
                                         const bool greedy) {
         SolverReturn returnVal(false, {}, {});
-        Cell* runner;
 
-        for (const auto& cell : grid.getGroups(Group::ROW)) {
-            runner = cell;
-
-            while (runner != nullptr) {
+        for (Cell* cell : grid.getGroups(Group::ROW)) {
+            for (Cell* runner = cell; runner != nullptr; runner = runner->getNeighbour(Direction::NEXT, Group::ROW)) {
                 if (!runner->isFound()) {
                     if (runner->solve()) {
                         std::get<0>(returnVal) = true;
@@ -21,8 +19,6 @@ namespace cursudsol {
                         }
                     }
                 }
-
-                runner = runner->getNeighbour(Direction::NEXT, Group::ROW);
             }
         }
 

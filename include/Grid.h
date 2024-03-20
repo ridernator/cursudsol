@@ -21,6 +21,8 @@ namespace cursudsol {
 
             const Order& getOrder() const;
 
+            void compact();
+
         private:
             const Order& order;
 

@@ -14,7 +14,7 @@ namespace cursudsol {
     }
 
     Solver::~Solver() {
-        for (const auto& rule : rules) {
+        for (const Rule* rule : rules) {
             delete rule;
         }
     }
@@ -22,11 +22,13 @@ namespace cursudsol {
     SolverReturn Solver::solveStep() {
         SolverReturn returnVal;
 
-        for (const auto& rule : rules) {
+        for (Rule* rule : rules) {
             returnVal = rule->solveStep(grid, true);
 
             if (std::get<0>(returnVal)) {
-               break;
+                grid.compact();
+
+                break;
             }
         }
 

@@ -89,4 +89,34 @@ namespace cursudsol {
     const Order& Grid::getOrder() const {
         return order;
     }
+
+    void Grid::compact() {
+        // Cell* runner;
+        // Cell* previous;
+        //
+        // for (Group group : ALL_GROUPS) {
+        //     for (Cell* start : getGroups(group)) {
+        //         while ((start != nullptr) &&
+        //                (start->isFound())) {
+        //             start = start->getNeighbour(Direction::NEXT, group);
+        //         }
+        //
+        //         runner = start;
+        //
+        //         while (runner != nullptr) {
+        //             if (runner->isFound()) {
+        //                 previous->setNeighbour(Direction::NEXT, group, runner->getNeighbour(Direction::NEXT, group));
+        //
+        //                 if (runner->getNeighbour(Direction::NEXT, group) != nullptr) {
+        //                     runner->getNeighbour(Direction::NEXT, group)->setNeighbour(Direction::PREVIOUS, group, previous);
+        //                 }
+        //             } else {
+        //                 previous = runner;
+        //             }
+        //
+        //             runner = runner->getNeighbour(Direction::NEXT, group);
+        //         }
+        //     }
+        // }
+    }
 }
