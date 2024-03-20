@@ -1,4 +1,5 @@
 #include "CandidateRemoval.h"
+#include "Group.h"
 #include "Order.h"
 #include "Rule.h"
 
@@ -6,26 +7,30 @@ namespace cursudsol {
     SolverReturn CandidateRemoval::solveStep(Grid& grid,
                                              const bool greedy) {
         SolverReturn returnVal(false, {}, {});
-        Cell* cell;
+        Cell* runner;
 
-        for (IntType index = 0; index < grid.getOrder().order4; ++index) {
-            cell = grid.getFlatData()[index];
+        for (const auto& cell : grid.getGroups(Group::ROW)) {
+            runner = cell;
 
-            if (cell->isFound()) {
-                for (const auto& testCell : cell->getSeenCells()) {
-                    if ((!testCell->isFound()) &&
-                        (testCell->containsPencilMark(cell->getValue()))) {
-                        testCell->removePencilMark(cell->getValue());
+            while (runner != nullptr) {
+                if (runner->isFound()) {
+                    for (const auto& testCell : runner->getSeenCells()) {
+                        if ((!testCell->isFound()) &&
+                            (testCell->containsPencilMark(runner->getValue()))) {
+                            testCell->removePencilMark(runner->getValue());
 
-                        std::get<0>(returnVal) = true;
-                        std::get<1>(returnVal)[testCell].insert(cell->getValue());
-                        std::get<2>(returnVal)[cell];
+                            std::get<0>(returnVal) = true;
+                            std::get<1>(returnVal)[testCell].insert(runner->getValue());
+                            std::get<2>(returnVal)[runner];
 
-                        if (!greedy) {
-                            return returnVal;
+                            if (!greedy) {
+                                return returnVal;
+                            }
                         }
                     }
                 }
+
+                runner = runner->getNeighbour(Direction::NEXT, Group::ROW);
             }
         }
 
