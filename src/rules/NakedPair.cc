@@ -38,7 +38,7 @@ namespace cursudsol {
 
                                 if (!thirdMatch) {
                                     // Get rid
-                                    for (IntType remove = 0; remove < order.order2; ++remove) {
+                                    for (const IntType remove : cell1->getPencilMarks()) {
                                         if (cell1->containsPencilMark(remove)) {
                                             for (Cell* remover = groupStart; remover != nullptr; remover = remover->getNeighbour(Direction::NEXT, group)) {
                                                 if ((!remover->isFound()) &&
@@ -47,19 +47,23 @@ namespace cursudsol {
                                                     (remover->containsPencilMark(remove))) {
                                                     remover->removePencilMark(remove);
 
-                                                    std::get<0>(returnVal) = true;
+                                                    std::get<bool>(returnVal) = true;
                                                     std::get<1>(returnVal)[remover].insert(remove);
-                                                    std::get<2>(returnVal)[cell1].insert(remove);
-                                                    std::get<2>(returnVal)[cell2].insert(remove);
 
-                                                    if (greedy) {
-                                                        success = true;
-                                                    } else {
-                                                        return returnVal;
+                                                    for (const IntType because : cell1->getPencilMarks()) {
+                                                        std::get<2>(returnVal)[cell1].insert(because);
+                                                        std::get<2>(returnVal)[cell2].insert(because);
                                                     }
+
+                                                    success = true;
                                                 }
                                             }
                                         }
+                                    }
+
+                                    if ((std::get<bool>(returnVal)) &&
+                                        (!greedy)) {
+                                        return returnVal;
                                     }
                                 }
 

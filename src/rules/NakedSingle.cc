@@ -11,7 +11,7 @@ namespace cursudsol {
             for (Cell* runner = cell; runner != nullptr; runner = runner->getNeighbour(Direction::NEXT, Group::ROW)) {
                 if (!runner->isFound()) {
                     if (runner->solve()) {
-                        std::get<0>(returnVal) = true;
+                        std::get<bool>(returnVal) = true;
                         std::get<2>(returnVal)[runner];
 
                         if (!greedy) {

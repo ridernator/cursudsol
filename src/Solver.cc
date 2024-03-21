@@ -25,9 +25,9 @@ namespace cursudsol {
         SolverReturn returnVal;
 
         for (Rule* rule : rules) {
-            returnVal = rule->solveStep(grid, true);
+            returnVal = rule->solveStep(grid, false);
 
-            if (std::get<0>(returnVal)) {
+            if (std::get<bool>(returnVal)) {
                 grid.compact();
 
                 break;

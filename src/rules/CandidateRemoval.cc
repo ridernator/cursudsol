@@ -15,14 +15,15 @@ namespace cursudsol {
                             (testCell->containsPencilMark(runner->getValue()))) {
                             testCell->removePencilMark(runner->getValue());
 
-                            std::get<0>(returnVal) = true;
+                            std::get<bool>(returnVal) = true;
                             std::get<1>(returnVal)[testCell].insert(runner->getValue());
                             std::get<2>(returnVal)[runner];
-
-                            if (!greedy) {
-                                return returnVal;
-                            }
                         }
+                    }
+
+                    if ((std::get<bool>(returnVal)) &&
+                        (!greedy)) {
+                        return returnVal;
                     }
                 }
             }

@@ -43,7 +43,7 @@ namespace cursudsol {
                                             (remover->containsPencilMark(remove))) {
                                             remover->removePencilMark(remove);
 
-                                            std::get<0>(returnVal) = true;
+                                            std::get<bool>(returnVal) = true;
                                             std::get<1>(returnVal)[remover].insert(remove);
                                             std::get<2>(returnVal)[remover].insert(*index1);
                                             std::get<2>(returnVal)[remover].insert(*index2);
@@ -51,7 +51,7 @@ namespace cursudsol {
                                     }
                                 }
 
-                                if (std::get<0>(returnVal)) {
+                                if (std::get<bool>(returnVal)) {
                                     return returnVal;
                                 }
                             }
