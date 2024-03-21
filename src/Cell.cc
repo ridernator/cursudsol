@@ -9,7 +9,7 @@ namespace cursudsol {
     Cell::Cell(const Order& order) : order(order),
                                      value(order.order2) {
         for (IntType index = 0; index < order.order2; ++index) {
-            pencilMarks[index] = true;
+            pencilMarks.insert(index);
         }
 
         for (const Direction direction : ALL_DIRECTIONS) {
@@ -35,11 +35,11 @@ namespace cursudsol {
     }
 
     void Cell::removePencilMark(const IntType pencilMark) {
-        pencilMarks[pencilMark] = false;
+        pencilMarks.erase(pencilMark);
     }
 
     bool Cell::containsPencilMark(const IntType pencilMark) {
-        return pencilMarks[pencilMark];
+        return pencilMarks.contains(pencilMark);
     }
 
     bool Cell::isFound() const {
@@ -47,16 +47,18 @@ namespace cursudsol {
     }
 
     IntType Cell::countPencilMarks() const {
-        return std::count_if(pencilMarks.begin(), pencilMarks.end(), [] (const std::pair<IntType, bool>& value) {
-            return value.second;
-        });
+        return pencilMarks.size();
+    }
+
+    std::set<IntType>& Cell::getPencilMarks() {
+        return pencilMarks;
     }
 
     bool Cell::solve() {
-        if (countPencilMarks() == 1) {
-            setValue(std::find_if(pencilMarks.begin(), pencilMarks.end(), [] (const std::pair<IntType, bool>& value) {
-                return value.second;
-            })->first);
+        if (pencilMarks.size() == 1) {
+            setValue(*pencilMarks.begin());
+
+            pencilMarks.clear();
 
             return true;
         }

@@ -4,6 +4,7 @@
 #include "NakedPair.h"
 #include "NakedSingle.h"
 #include "HiddenSingle.h"
+#include "HiddenPair.h"
 
 namespace cursudsol {
     Solver::Solver(Grid& grid) : grid(grid) {
@@ -11,6 +12,7 @@ namespace cursudsol {
         rules.push_back(new NakedSingle());
         rules.push_back(new HiddenSingle());
         rules.push_back(new NakedPair());
+        rules.push_back(new HiddenPair());
     }
 
     Solver::~Solver() {

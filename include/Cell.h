@@ -37,12 +37,14 @@ namespace cursudsol {
 
             std::set<Cell*>& getSeenCells();
 
+            std::set<IntType>& getPencilMarks();
+
         private:
             const Order& order;
 
             IntType value;
 
-            std::map<IntType, bool> pencilMarks;
+            std::set<IntType> pencilMarks;
 
             std::map<Direction, std::map<Group, Cell*>> neighbours;
 
