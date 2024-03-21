@@ -23,8 +23,8 @@ namespace cursudsol {
                 }
 
                 if (allPMs.size() > 2) {
-                    for (auto index1 = allPMs.rbegin(); index1 != allPMs.rend(); ++index1) {
-                        for (auto index2 = allPMs.begin(); *index2 != *index1; ++index2) {
+                    for (auto index1 = allPMs.begin(); index1 != allPMs.end(); ++index1) {
+                        for (auto index2 = index1; ++index2 != allPMs.end();) {
                             cellSet.clear();
 
                             for (Cell* runner = start; runner != nullptr; runner = runner->getNeighbour(Direction::NEXT, group)) {
