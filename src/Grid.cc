@@ -91,40 +91,63 @@ namespace cursudsol {
     }
 
     void Grid::compact() {
-        for (IntType index = 0; index < order.order4; ++index) {
-            if (!flatData[index]->isFound()) {
-                std::erase_if(flatData[index]->getSeenCells(), [] (const Cell* cell) {
-                    return cell->isFound();
-                });
+        // Put starts of groups to first unfound cell
+        for (const Group& group : ALL_GROUPS) {
+            for (auto& groupStart : getGroups(group)) {
+                while ((groupStart != nullptr) &&
+                       (groupStart->isFound())) {
+                    groupStart = groupStart->getNeighbour(Direction::NEXT, group);
+
+                    if (groupStart != nullptr) {
+                        groupStart->setNeighbour(Direction::PREVIOUS, group, nullptr);
+                    }
+                }
             }
         }
 
-        // Cell* runner;
-        // Cell* previous;
-        //
-        // for (Group group : ALL_GROUPS) {
-        //     for (Cell* start : getGroups(group)) {
-        //         while ((start != nullptr) &&
-        //                (start->isFound())) {
-        //             start = start->getNeighbour(Direction::NEXT, group);
-        //         }
-        //
-        //         runner = start;
-        //
-        //         while (runner != nullptr) {
-        //             if (runner->isFound()) {
-        //                 previous->setNeighbour(Direction::NEXT, group, runner->getNeighbour(Direction::NEXT, group));
-        //
-        //                 if (runner->getNeighbour(Direction::NEXT, group) != nullptr) {
-        //                     runner->getNeighbour(Direction::NEXT, group)->setNeighbour(Direction::PREVIOUS, group, previous);
-        //                 }
-        //             } else {
-        //                 previous = runner;
-        //             }
-        //
-        //             runner = runner->getNeighbour(Direction::NEXT, group);
-        //         }
-        //     }
-        // }
+        // Remove found cells from groups
+        Cell* cell;
+        Cell* previous;
+        Cell* next;
+
+        for (IntType index = 0; index < order.order4; ++index) {
+            cell = flatData[index];
+
+            if (cell->isFound()) {
+                for (const Group& group : ALL_GROUPS) {
+                    previous = cell->getNeighbour(Direction::PREVIOUS, group);
+                    next = cell->getNeighbour(Direction::NEXT, group);
+
+                    if (next != nullptr) {
+                        next->setNeighbour(Direction::PREVIOUS, group, previous);
+                    }
+
+                    if (previous != nullptr) {
+                        previous->setNeighbour(Direction::NEXT, group, next);
+                    }
+                }
+            }
+        }
+
+        // Remove found seen cells
+        for (IntType index = 0; index < order.order4; ++index) {
+            if (flatData[index]->isFound()) {
+                for (auto& cell : flatData[index]->getSeenCells()) {
+                    cell->getSeenCells().erase(flatData[index]);
+                }
+            }
+        }
+    }
+
+    bool Grid::isSolved() {
+        for (const Group& group : ALL_GROUPS) {
+            for (auto& groupStart : getGroups(group)) {
+                if (groupStart != nullptr) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 }

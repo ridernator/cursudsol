@@ -21,11 +21,21 @@ namespace cursudsol {
         }
     }
 
-    SolverReturn Solver::solveStep() {
+    bool Solver::solve() {
+        while (!grid.isSolved()) {
+            if (!std::get<bool>(solveStep(true))) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    SolverReturn Solver::solveStep(const bool greedy) {
         SolverReturn returnVal;
 
         for (const auto& rule : rules) {
-            returnVal = rule.second->solveStep(grid, false);
+            returnVal = rule.second->solveStep(grid, greedy);
 
             if (std::get<bool>(returnVal)) {
                 grid.compact();

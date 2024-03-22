@@ -13,7 +13,9 @@ namespace cursudsol {
             Solver(Grid& grid);
             ~Solver();
 
-            SolverReturn solveStep();
+            SolverReturn solveStep(const bool greedy = true);
+
+            bool solve();
 
         private:
             Grid& grid;

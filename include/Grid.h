@@ -23,6 +23,8 @@ namespace cursudsol {
 
             void compact();
 
+            bool isSolved();
+
         private:
             const Order& order;
 

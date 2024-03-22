@@ -1,29 +1,31 @@
 #include "CandidateRemoval.h"
-#include "Group.h"
+#include "Order.h"
 #include "Rule.h"
 
 namespace cursudsol {
     SolverReturn CandidateRemoval::solveStep(Grid& grid,
                                              const bool greedy) {
         SolverReturn returnVal(false, {}, {});
+        Cell* cell;
 
-        for (Cell* cell : grid.getGroups(Group::ROW)) {
-            for (Cell* runner = cell; runner != nullptr; runner = runner->getNeighbour(Direction::NEXT, Group::ROW)) {
-                if (runner->isFound()) {
-                    for (const auto& testCell : runner->getSeenCells()) {
-                        if (testCell->containsPencilMark(runner->getValue())) {
-                            testCell->removePencilMark(runner->getValue());
+        // Have to use flat data as we need to see found cells
+        for (IntType index = 0; index < grid.getOrder().order4; ++index) {
+            cell = grid.getFlatData()[index];
 
-                            std::get<bool>(returnVal) = true;
-                            std::get<1>(returnVal)[testCell].insert(runner->getValue());
-                            std::get<2>(returnVal)[runner];
-                        }
+            if (cell->isFound()) {
+                for (const auto& testCell : cell->getSeenCells()) {
+                    if (testCell->containsPencilMark(cell->getValue())) {
+                        testCell->removePencilMark(cell->getValue());
+
+                        std::get<bool>(returnVal) = true;
+                        std::get<1>(returnVal)[testCell].insert(cell->getValue());
+                        std::get<2>(returnVal)[cell];
                     }
+                }
 
-                    if ((std::get<bool>(returnVal)) &&
-                        (!greedy)) {
-                        return returnVal;
-                    }
+                if ((std::get<bool>(returnVal)) &&
+                    (!greedy)) {
+                    break;
                 }
             }
         }

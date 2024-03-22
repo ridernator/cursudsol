@@ -18,16 +18,14 @@ namespace cursudsol {
                 for (Cell* cell1 = groupStart; cell1 != nullptr; cell1 = cell1->getNeighbour(Direction::NEXT, group)) {
                     success = false;
 
-                    if ((!cell1->isFound()) && (cell1->countPencilMarks() == 2)) {
+                    if (cell1->countPencilMarks() == 2) {
                         for (Cell* cell2 = cell1->getNeighbour(Direction::NEXT, group); cell2 != nullptr; cell2 = cell2->getNeighbour(Direction::NEXT, group)) {
-                            if ((!cell2->isFound()) &&
-                                (cell2->countPencilMarks() == 2) &&
+                            if ((cell2->countPencilMarks() == 2) &&
                                 (comparePencilMarks(cell2, cell1, order.order2))) {
                                 // Found matching pair. Now check there aren't any others
                                 thirdMatch = false;
                                 for (Cell* badCell = cell2->getNeighbour(Direction::NEXT, group); badCell != nullptr; badCell = badCell->getNeighbour(Direction::NEXT, group)) {
-                                    if ((!badCell->isFound()) &&
-                                        (badCell->countPencilMarks() == 2) &&
+                                    if ((badCell->countPencilMarks() == 2) &&
                                         (comparePencilMarks(badCell, cell1, order.order2))) {
                                         // Give up. Found 3rd candidate
                                         thirdMatch = true;
@@ -41,8 +39,7 @@ namespace cursudsol {
                                     for (const IntType remove : cell1->getPencilMarks()) {
                                         if (cell1->containsPencilMark(remove)) {
                                             for (Cell* remover = groupStart; remover != nullptr; remover = remover->getNeighbour(Direction::NEXT, group)) {
-                                                if ((!remover->isFound()) &&
-                                                    (remover != cell1) &&
+                                                if ((remover != cell1) &&
                                                     (remover != cell2) &&
                                                     (remover->containsPencilMark(remove))) {
                                                     remover->removePencilMark(remove);

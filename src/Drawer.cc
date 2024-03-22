@@ -34,11 +34,16 @@ namespace cursudsol {
 
             refresh();
 
-            if (getch() == 'q') {
-                break;
-            }
+            int input = getch();
 
-            solverReturn = solver.solveStep();
+            if (input == 'q') {
+                break;
+            } else if (input == ' ') {
+                solverReturn = solver.solveStep();
+            } else if (input == 'a') {
+                solver.solve();
+                solverReturn = {false, {}, {}};
+            }
         }
     }
 

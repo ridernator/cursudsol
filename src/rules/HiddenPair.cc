@@ -17,9 +17,7 @@ namespace cursudsol {
                 allPMs.clear();
 
                 for (Cell* runner = start; runner != nullptr; runner = runner->getNeighbour(Direction::NEXT, group)) {
-                    if (!runner->isFound()) {
-                        allPMs.insert(runner->getPencilMarks().begin(), runner->getPencilMarks().end());
-                    }
+                    allPMs.insert(runner->getPencilMarks().begin(), runner->getPencilMarks().end());
                 }
 
                 if (allPMs.size() > 2) {
@@ -28,9 +26,8 @@ namespace cursudsol {
                             cellSet.clear();
 
                             for (Cell* runner = start; runner != nullptr; runner = runner->getNeighbour(Direction::NEXT, group)) {
-                                if ((!runner->isFound()) &&
-                                    ((runner->containsPencilMark(*index1)) ||
-                                     (runner->containsPencilMark(*index2)))) {
+                                if ((runner->containsPencilMark(*index1)) ||
+                                    (runner->containsPencilMark(*index2))) {
                                     cellSet.insert(runner);
                                 }
                             }

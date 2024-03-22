@@ -19,8 +19,7 @@ namespace cursudsol {
 
                     // Count pencil marks with this number in the group
                     for (Cell* runner = cell; runner != nullptr; runner = runner->getNeighbour(Direction::NEXT, group)) {
-                        if ((!runner->isFound()) &&
-                            (runner->containsPencilMark(num))) {
+                        if (runner->containsPencilMark(num)) {
                             candidate = runner;
 
                             if (++count > 1) {

@@ -9,14 +9,12 @@ namespace cursudsol {
 
         for (Cell* cell : grid.getGroups(Group::ROW)) {
             for (Cell* runner = cell; runner != nullptr; runner = runner->getNeighbour(Direction::NEXT, Group::ROW)) {
-                if (!runner->isFound()) {
-                    if (runner->solve()) {
-                        std::get<bool>(returnVal) = true;
-                        std::get<2>(returnVal)[runner];
+                if (runner->solve()) {
+                    std::get<bool>(returnVal) = true;
+                    std::get<2>(returnVal)[runner];
 
-                        if (!greedy) {
-                            break;
-                        }
+                    if (!greedy) {
+                        return returnVal;
                     }
                 }
             }
