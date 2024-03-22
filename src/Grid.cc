@@ -91,6 +91,14 @@ namespace cursudsol {
     }
 
     void Grid::compact() {
+        for (IntType index = 0; index < order.order4; ++index) {
+            if (!flatData[index]->isFound()) {
+                std::erase_if(flatData[index]->getSeenCells(), [] (const Cell* cell) {
+                    return cell->isFound();
+                });
+            }
+        }
+
         // Cell* runner;
         // Cell* previous;
         //

@@ -11,8 +11,7 @@ namespace cursudsol {
             for (Cell* runner = cell; runner != nullptr; runner = runner->getNeighbour(Direction::NEXT, Group::ROW)) {
                 if (runner->isFound()) {
                     for (const auto& testCell : runner->getSeenCells()) {
-                        if ((!testCell->isFound()) &&
-                            (testCell->containsPencilMark(runner->getValue()))) {
+                        if (testCell->containsPencilMark(runner->getValue())) {
                             testCell->removePencilMark(runner->getValue());
 
                             std::get<bool>(returnVal) = true;

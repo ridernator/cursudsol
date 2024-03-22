@@ -8,24 +8,24 @@
 
 namespace cursudsol {
     Solver::Solver(Grid& grid) : grid(grid) {
-        rules.push_back(new CandidateRemoval());
-        rules.push_back(new NakedSingle());
-        rules.push_back(new HiddenSingle());
-        rules.push_back(new NakedPair());
-        rules.push_back(new HiddenPair());
+        rules[0] = new CandidateRemoval();
+        rules[1] = new NakedSingle();
+        rules[2] = new HiddenSingle();
+        rules[3] = new NakedPair();
+        rules[4] = new HiddenPair();
     }
 
     Solver::~Solver() {
-        for (const Rule* rule : rules) {
-            delete rule;
+        for (const auto& rule : rules) {
+            delete rule.second;
         }
     }
 
     SolverReturn Solver::solveStep() {
         SolverReturn returnVal;
 
-        for (Rule* rule : rules) {
-            returnVal = rule->solveStep(grid, false);
+        for (const auto& rule : rules) {
+            returnVal = rule.second->solveStep(grid, false);
 
             if (std::get<bool>(returnVal)) {
                 grid.compact();

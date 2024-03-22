@@ -1,9 +1,10 @@
 #pragma once
 
 #include <cstddef>
-#include <vector>
+#include <map>
 
 #include "Grid.h"
+#include "Order.h"
 #include "Rule.h"
 
 namespace cursudsol {
@@ -17,7 +18,7 @@ namespace cursudsol {
         private:
             Grid& grid;
 
-            std::vector<Rule*> rules;
+            std::map<IntType, Rule*> rules;
 
             std::size_t ruleIndex;
     };
