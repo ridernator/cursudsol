@@ -5,6 +5,7 @@
 #include "Order.h"
 
 #include <set>
+#include <string>
 #include <tuple>
 #include <map>
 
@@ -13,9 +14,16 @@ namespace cursudsol {
 
     class Rule {
         public:
+            Rule(const std::string& name);
+
             virtual ~Rule() {}
 
             virtual SolverReturn solveStep(Grid& grid,
-                                           const bool greedy = true) = 0;
+                                           const bool greedy = true) const = 0;
+
+            const std::string& getName() const;
+
+        private:
+            const std::string name;
     };
 }

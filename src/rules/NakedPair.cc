@@ -6,7 +6,7 @@
 
 namespace cursudsol {
     SolverReturn NakedPair::solveStep(Grid& grid,
-                                      const bool greedy) {
+                                      const bool greedy) const {
         SolverReturn returnVal(false, {}, {});
         bool success;
         bool thirdMatch;
@@ -81,7 +81,7 @@ namespace cursudsol {
 
     bool NakedPair::comparePencilMarks(Cell* a,
                                        Cell* b,
-                                       const IntType count) {
+                                       const IntType count) const {
         for (IntType index = 0; index < count; ++index) {
             if (a->containsPencilMark(index) != b->containsPencilMark(index)) {
                 return false;

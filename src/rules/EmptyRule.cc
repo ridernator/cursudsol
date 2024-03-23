@@ -3,7 +3,7 @@
 
 namespace cursudsol {
     SolverReturn EmptyRule::solveStep(Grid&,
-                                      const bool) {
+                                      const bool) const {
         SolverReturn returnVal(false, {}, {});
 
         return returnVal;

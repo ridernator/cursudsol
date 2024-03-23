@@ -4,7 +4,7 @@
 
 namespace cursudsol {
     SolverReturn NakedSingle::solveStep(Grid& grid,
-                                        const bool greedy) {
+                                        const bool greedy) const {
         SolverReturn returnVal(false, {}, {});
 
         for (Cell* cell : grid.getGroups(Group::ROW)) {

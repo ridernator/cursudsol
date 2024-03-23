@@ -6,7 +6,7 @@
 
 namespace cursudsol {
     SolverReturn HiddenSingle::solveStep(Grid& grid,
-                                         const bool) {
+                                         const bool) const {
         const Order& order = grid.getOrder();
         SolverReturn returnVal(false, {}, {});
         Cell* candidate;

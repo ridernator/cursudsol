@@ -4,7 +4,7 @@
 
 namespace cursudsol {
     SolverReturn CandidateRemoval::solveStep(Grid& grid,
-                                             const bool greedy) {
+                                             const bool greedy) const {
         SolverReturn returnVal(false, {}, {});
         Cell* cell;
 

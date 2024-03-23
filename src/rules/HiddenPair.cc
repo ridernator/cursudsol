@@ -5,7 +5,7 @@
 
 namespace cursudsol {
     SolverReturn HiddenPair::solveStep(Grid& grid,
-                                      const bool) {
+                                      const bool) const {
         SolverReturn returnVal(false, {}, {});
         Cell* start;
         std::set<IntType> allPMs;
