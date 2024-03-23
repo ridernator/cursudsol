@@ -14,7 +14,7 @@ namespace cursudsol {
                    Solver& solver);
             ~Drawer();
 
-            void draw();
+            void init();
 
         private:
             static const int MAIN_GRID_COLOUR = 1;
@@ -27,6 +27,8 @@ namespace cursudsol {
             static const int NUM_SPACING = 3;
 
             void initColours();
+
+            void draw(SolverReturn solverReturn = DEFAULT_SOLVER_RETURN());
 
             void drawOuterGrid(const int y,
                                const int x,
@@ -53,9 +55,13 @@ namespace cursudsol {
                            const int x,
                            WINDOW* window = stdscr);
 
+            bool handleKey(const int key);
+
             Grid& grid;
             Solver& solver;
 
             const Order& order;
+
+            IntType ruleIndex;
     };
 }

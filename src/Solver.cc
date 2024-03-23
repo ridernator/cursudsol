@@ -9,16 +9,16 @@
 
 namespace cursudsol {
     Solver::Solver(Grid& grid) : grid(grid) {
-        rules[0] = {true, false, new CandidateRemoval()};
-        rules[1] = {true, false, new NakedSingle()};
-        rules[2] = {true, false, new HiddenSingle()};
-        rules[3] = {true, false, new NakedPair()};
-        rules[4] = {true, false, new HiddenPair()};
+        rules[0] = new CandidateRemoval();
+        rules[1] = new NakedSingle();
+        rules[2] = new HiddenSingle();
+        rules[3] = new NakedPair();
+        rules[4] = new HiddenPair();
     }
 
     Solver::~Solver() {
         for (const auto& rule : rules) {
-            delete std::get<Rule*>(rule.second);
+            delete rule.second;
         }
     }
 
@@ -36,8 +36,8 @@ namespace cursudsol {
         SolverReturn returnVal = {false, {}, {}, 100};
 
         for (const auto& rule : rules) {
-            if (std::get<0>(rule.second)) {
-                returnVal = std::get<Rule*>(rule.second)->solveStep(grid, std::get<1>(rule.second));
+            if (rule.second->isEnabled()) {
+                returnVal = rule.second->solveStep(grid, true);
 
                 if (std::get<bool>(returnVal)) {
                     std::get<IntType>(returnVal) = rule.first;
@@ -52,7 +52,7 @@ namespace cursudsol {
         return returnVal;
     }
 
-    std::map<IntType, std::tuple<bool, bool, Rule*>>& Solver::getRules() {
+    std::map<IntType, Rule*>& Solver::getRules() {
         return rules;
     }
 }

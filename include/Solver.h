@@ -17,12 +17,12 @@ namespace cursudsol {
 
             bool solve();
 
-            std::map<IntType, std::tuple<bool, bool, Rule*>>& getRules();
+            std::map<IntType, Rule*>& getRules();
 
         private:
             Grid& grid;
 
-            std::map<IntType, std::tuple<bool, bool, Rule*>> rules;
+            std::map<IntType, Rule*> rules;
 
             std::size_t ruleIndex;
     };

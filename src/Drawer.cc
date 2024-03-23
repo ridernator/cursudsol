@@ -4,13 +4,15 @@
 #include "Solver.h"
 
 #include <algorithm>
+#include <cstddef>
 #include <ncurses.h>
 
 namespace cursudsol {
     Drawer::Drawer(Grid& grid,
                    Solver& solver) : grid(grid),
                                      solver(solver),
-                                     order(grid.getOrder()) {
+                                     order(grid.getOrder()),
+                                     ruleIndex(0) {
         initscr();
         raw();
         keypad(stdscr, TRUE);
@@ -18,40 +20,107 @@ namespace cursudsol {
         curs_set(0);
 
         initColours();
-
     }
 
     Drawer::~Drawer() {
         endwin();
     }
 
-    void Drawer::draw() {
-        SolverReturn solverReturn = DEFAULT_SOLVER_RETURN();
+    void Drawer::init() {
+        draw();
 
-        while (true) {
-            drawGrid(0, 0, solverReturn);
-            drawRules(10, 100);
+        while (!handleKey(getch()));
+    }
 
-            refresh();
+    void Drawer::draw(SolverReturn solverReturn) {
+        drawGrid(0, 0, solverReturn);
+        drawRules(0, 100);
 
-            int input = getch();
+        refresh();
+    }
 
-            if (input == 'q') {
+    bool Drawer::handleKey(const int key) {
+        switch (key) {
+            case 'q': {
+                return true;
+
                 break;
-            } else if (input == ' ') {
-                solverReturn = solver.solveStep();
-            } else if (input == 'a') {
+            }
+
+            case KEY_DOWN: {
+                if (++ruleIndex == solver.getRules().size()) {
+                    ruleIndex = 0;
+                }
+
+                draw();
+
+                break;
+            }
+
+            case KEY_UP: {
+                if (ruleIndex-- == 0) {
+                    ruleIndex = solver.getRules().size() - 1;
+                }
+
+                draw();
+
+                break;
+            }
+
+            case 'e':
+            case 'd': {
+                solver.getRules()[ruleIndex]->enable(key == 'e');
+
+                draw();
+
+                break;
+            }
+
+            case 'E':
+            case 'D': {
+                for (const auto& rule : solver.getRules()) {
+                    rule.second->enable(key == 'E');
+                }
+
+                draw();
+
+                break;
+            }
+
+            case 'r': {
+                // grid.reset();
+
+                draw();
+
+                break;
+            }
+
+            case KEY_ENTER:
+            case '\n':
+            case '\r':
+            case 'g': {
+                draw(solver.getRules()[ruleIndex]->solveStep(grid, key == 'g'));
+
+                break;
+            }
+
+            case 'a': {
                 solver.solve();
-                solverReturn = DEFAULT_SOLVER_RETURN();
+
+                draw();
+
+                break;
             }
         }
+
+        return false;
     }
 
     void Drawer::initColours() {
         if (has_colors()) {
             start_color();
 
-            init_pair(MAIN_GRID_COLOUR, COLOR_GREEN, COLOR_BLACK);
+            init_pair(MAIN_GRID_COLOUR, COLOR_RED,   COLOR_BLACK);
             init_pair(SUB_GRID_COLOUR,  COLOR_BLUE,  COLOR_BLACK);
             init_pair(NUM_COLOUR,       COLOR_WHITE, COLOR_BLACK);
             init_pair(FOUND_COLOUR,     COLOR_BLACK, COLOR_GREEN);
@@ -319,6 +388,19 @@ namespace cursudsol {
     void Drawer::drawRules(const int y,
                            const int x,
                            WINDOW* window) {
-        mvwprintw(window, y, x, "Rules drawn here");
+        auto& rules = solver.getRules();
+        Rule* rule;
+        std::size_t maxRuleNameLength = 0;
+
+        for (const auto& r : rules) {
+            maxRuleNameLength = std::max(maxRuleNameLength, r.second->getName().size());
+        }
+
+        for (IntType index = 0; index < rules.size(); ++index) {
+            rule = rules[index];
+
+            mvwprintw(window, y + index, x, "%c%s", (ruleIndex == index ? '*' : ' '),rule->getName().c_str());
+            mvwprintw(window, y + index, x + maxRuleNameLength + 5, "[%c]", (rule->isEnabled() ? 'X' : ' '));
+        }
     }
 }

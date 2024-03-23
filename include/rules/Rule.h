@@ -25,7 +25,13 @@ namespace cursudsol {
 
             const std::string& getName() const;
 
+            bool isEnabled() const;
+
+            void enable(const bool enabled = true);
+
         private:
             const std::string name;
+
+            bool enabled;
     };
 }

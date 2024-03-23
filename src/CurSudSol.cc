@@ -8,7 +8,7 @@ namespace cursudsol {
                                                            grid(order, initialGrid),
                                                            solver(grid),
                                                            drawer(grid, solver) {
-        drawer.draw();
+        drawer.init();
     }
 }
 
