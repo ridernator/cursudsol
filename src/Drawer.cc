@@ -30,6 +30,7 @@ namespace cursudsol {
 
         while (true) {
             drawGrid(0, 0, solverReturn);
+            drawRules(10, 100);
 
             refresh();
 
@@ -59,10 +60,10 @@ namespace cursudsol {
         }
     }
 
-    void Drawer::drawBigNum(WINDOW* window,
-                            const int y,
+    void Drawer::drawBigNum(const int y,
                             const int x,
-                            const IntType num) {
+                            const IntType num,
+                            WINDOW* window) {
         for (IntType index = 0; index < order.order; ++index) {
             mvwhline(window, y + index, x, ' ', order.order * NUM_SPACING);
         }
@@ -177,9 +178,9 @@ namespace cursudsol {
         }
     }
 
-    void Drawer::drawOuterGrid(WINDOW* window,
-                               const int y,
-                               const int x) {
+    void Drawer::drawOuterGrid(const int y,
+                               const int x,
+                               WINDOW* window) {
         // Draw lines
         attron(COLOR_PAIR(MAIN_GRID_COLOUR));
         for (IntType i = 0; i <= order.order; ++i) {
@@ -214,12 +215,12 @@ namespace cursudsol {
         attroff(COLOR_PAIR(MAIN_GRID_COLOUR));
     }
 
-    void Drawer::drawInnerGrid(WINDOW* window,
-                               const int y,
+    void Drawer::drawInnerGrid(const int y,
                                const int x,
                                const int dataY,
                                const int dataX,
-                               SolverReturn& solverReturn) {
+                               SolverReturn& solverReturn,
+                               WINDOW* window) {
         // Draw lines
         attron(COLOR_PAIR(SUB_GRID_COLOUR));
         for (IntType row = 1; row < order.order; ++row) {
@@ -249,11 +250,11 @@ namespace cursudsol {
                 if (cell->isFound()) {
                     if (becausePMs.contains(cell)) {
                         attron(COLOR_PAIR(BECAUSE_COLOUR));
-                        drawBigNum(window, y + (row * (order.order + 1)) + 1, x + (col * ((order.order * NUM_SPACING) + 1)) + 1, cell->getValue());
+                        drawBigNum(y + (row * (order.order + 1)) + 1, x + (col * ((order.order * NUM_SPACING) + 1)) + 1, cell->getValue(), window);
                         attroff(COLOR_PAIR(BECAUSE_COLOUR));
                     } else {
                         attron(COLOR_PAIR(FOUND_COLOUR));
-                        drawBigNum(window, y + (row * (order.order + 1)) + 1, x + (col * ((order.order * NUM_SPACING) + 1)) + 1, cell->getValue());
+                        drawBigNum(y + (row * (order.order + 1)) + 1, x + (col * ((order.order * NUM_SPACING) + 1)) + 1, cell->getValue(), window);
                         attroff(COLOR_PAIR(FOUND_COLOUR));
                     }
                 } else {
@@ -297,27 +298,27 @@ namespace cursudsol {
         attroff(COLOR_PAIR(NUM_COLOUR));
     }
 
-    void Drawer::drawGrid(WINDOW* window,
-                          const int y,
+    void Drawer::drawGrid(const int y,
                           const int x,
-                          SolverReturn& solverReturn) {
-        drawOuterGrid(window, y, x);
+                          SolverReturn& solverReturn,
+                          WINDOW* window) {
+        drawOuterGrid(y, x, window);
 
         for (IntType row = 0; row < order.order; ++row) {
             for (IntType col = 0; col < order.order; ++col) {
-                drawInnerGrid(window,
-                              y + (row * order.order * (order.order + 1)),
+                drawInnerGrid(y + (row * order.order * (order.order + 1)),
                               x + (col * order.order * ((order.order * NUM_SPACING) + 1)),
                               row * order.order,
                               col * order.order,
-                              solverReturn);
+                              solverReturn,
+                              window);
             }
         }
     }
 
-    void Drawer::drawGrid(const int y,
-                          const int x,
-                          SolverReturn& solverReturn) {
-        drawGrid(stdscr, y, x, solverReturn);
+    void Drawer::drawRules(const int y,
+                           const int x,
+                           WINDOW* window) {
+        mvwprintw(window, y, x, "Rules drawn here");
     }
 }

@@ -17,6 +17,8 @@ namespace cursudsol {
 
             bool solve();
 
+            std::map<IntType, std::tuple<bool, bool, Rule*>>& getRules();
+
         private:
             Grid& grid;
 

@@ -28,30 +28,31 @@ namespace cursudsol {
 
             void initColours();
 
-            void drawOuterGrid(WINDOW* window,
-                               const int y,
-                               const int x);
+            void drawOuterGrid(const int y,
+                               const int x,
+                               WINDOW* window = stdscr);
 
-            void drawInnerGrid(WINDOW* window,
-                               const int y,
+            void drawInnerGrid(const int y,
                                const int x,
                                const int dataY,
                                const int dataX,
-                               SolverReturn& solverReturn);
-
-            void drawGrid(WINDOW* window,
-                          const int y,
-                          const int x,
-                          SolverReturn& solverReturn);
+                               SolverReturn& solverReturn,
+                               WINDOW* window = stdscr);
 
             void drawGrid(const int y,
                           const int x,
-                          SolverReturn& solverReturn);
+                          SolverReturn& solverReturn,
+                          WINDOW* window = stdscr);
 
-            void drawBigNum(WINDOW* window,
-                            const int y,
+            void drawBigNum(const int y,
                             const int x,
-                            const IntType num);
+                            const IntType num,
+                            WINDOW* window = stdscr);
+
+            void drawRules(const int y,
+                           const int x,
+                           WINDOW* window = stdscr);
+
             Grid& grid;
             Solver& solver;
 

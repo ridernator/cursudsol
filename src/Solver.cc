@@ -51,4 +51,8 @@ namespace cursudsol {
 
         return returnVal;
     }
+
+    std::map<IntType, std::tuple<bool, bool, Rule*>>& Solver::getRules() {
+        return rules;
+    }
 }
