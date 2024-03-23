@@ -5,7 +5,8 @@
 namespace cursudsol {
     SolverReturn CandidateRemoval::solveStep(Grid& grid,
                                              const bool greedy) const {
-        SolverReturn returnVal(false, {}, {});
+        SolverReturn returnVal = DEFAULT_SOLVER_RETURN();
+
         Cell* cell;
 
         // Have to use flat data as we need to see found cells

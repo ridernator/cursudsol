@@ -4,7 +4,7 @@
 namespace cursudsol {
     SolverReturn EmptyRule::solveStep(Grid&,
                                       const bool) const {
-        SolverReturn returnVal(false, {}, {});
+        SolverReturn returnVal = DEFAULT_SOLVER_RETURN();
 
         return returnVal;
     }

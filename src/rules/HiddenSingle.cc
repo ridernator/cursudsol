@@ -7,8 +7,9 @@
 namespace cursudsol {
     SolverReturn HiddenSingle::solveStep(Grid& grid,
                                          const bool) const {
+        SolverReturn returnVal = DEFAULT_SOLVER_RETURN();
+
         const Order& order = grid.getOrder();
-        SolverReturn returnVal(false, {}, {});
         Cell* candidate;
         IntType count;
 

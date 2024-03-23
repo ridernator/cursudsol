@@ -5,7 +5,7 @@
 namespace cursudsol {
     SolverReturn NakedSingle::solveStep(Grid& grid,
                                         const bool greedy) const {
-        SolverReturn returnVal(false, {}, {});
+        SolverReturn returnVal = DEFAULT_SOLVER_RETURN();
 
         for (Cell* cell : grid.getGroups(Group::ROW)) {
             for (Cell* runner = cell; runner != nullptr; runner = runner->getNeighbour(Direction::NEXT, Group::ROW)) {

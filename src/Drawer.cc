@@ -4,7 +4,6 @@
 #include "Solver.h"
 
 #include <algorithm>
-#include <cstdint>
 #include <ncurses.h>
 
 namespace cursudsol {
@@ -27,7 +26,7 @@ namespace cursudsol {
     }
 
     void Drawer::draw() {
-        SolverReturn solverReturn;
+        SolverReturn solverReturn = DEFAULT_SOLVER_RETURN();
 
         while (true) {
             drawGrid(0, 0, solverReturn);
@@ -42,7 +41,7 @@ namespace cursudsol {
                 solverReturn = solver.solveStep();
             } else if (input == 'a') {
                 solver.solve();
-                solverReturn = {false, {}, {}};
+                solverReturn = DEFAULT_SOLVER_RETURN();
             }
         }
     }

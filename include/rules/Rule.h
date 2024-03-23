@@ -9,8 +9,10 @@
 #include <tuple>
 #include <map>
 
+#define DEFAULT_SOLVER_RETURN() {false, {} ,{}, 100}
+
 namespace cursudsol {
-    typedef std::tuple<bool, std::map<Cell*, std::set<IntType>>, std::map<Cell*, std::set<IntType>>> SolverReturn;
+    typedef std::tuple<bool, std::map<Cell*, std::set<IntType>>, std::map<Cell*, std::set<IntType>>, IntType> SolverReturn;
 
     class Rule {
         public:

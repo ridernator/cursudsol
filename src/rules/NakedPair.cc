@@ -7,7 +7,8 @@
 namespace cursudsol {
     SolverReturn NakedPair::solveStep(Grid& grid,
                                       const bool greedy) const {
-        SolverReturn returnVal(false, {}, {});
+        SolverReturn returnVal = DEFAULT_SOLVER_RETURN();
+
         bool success;
         bool thirdMatch;
 

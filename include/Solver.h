@@ -13,14 +13,14 @@ namespace cursudsol {
             Solver(Grid& grid);
             ~Solver();
 
-            SolverReturn solveStep(const bool greedy = true);
+            SolverReturn solveStep();
 
             bool solve();
 
         private:
             Grid& grid;
 
-            std::map<IntType, Rule*> rules;
+            std::map<IntType, std::tuple<bool, bool, Rule*>> rules;
 
             std::size_t ruleIndex;
     };
