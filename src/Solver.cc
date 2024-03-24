@@ -42,8 +42,6 @@ namespace cursudsol {
                 if (std::get<bool>(returnVal)) {
                     std::get<IntType>(returnVal) = rule.first;
 
-                    grid.compact();
-
                     break;
                 }
             }

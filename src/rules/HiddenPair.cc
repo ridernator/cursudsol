@@ -43,8 +43,11 @@ namespace cursudsol {
 
                                             std::get<bool>(returnVal) = true;
                                             std::get<1>(returnVal)[remover].insert(remove);
-                                            std::get<2>(returnVal)[remover].insert(*index1);
-                                            std::get<2>(returnVal)[remover].insert(*index2);
+
+                                            for (Cell* because : cellSet) {
+                                                std::get<2>(returnVal)[because].insert(*index1);
+                                                std::get<2>(returnVal)[because].insert(*index2);
+                                            }
                                         }
                                     }
                                 }

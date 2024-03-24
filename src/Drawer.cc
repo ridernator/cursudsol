@@ -113,6 +113,8 @@ namespace cursudsol {
             }
         }
 
+        grid.compact();
+
         return false;
     }
 
