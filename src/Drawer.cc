@@ -34,6 +34,11 @@ namespace cursudsol {
 
     void Drawer::draw(SolverReturn solverReturn) {
         drawGrid(0, 0, solverReturn);
+
+        if (std::get<IntType>(solverReturn) != 100) {
+            ruleIndex = std::get<IntType>(solverReturn);
+        }
+
         drawRules(0, 100);
 
         refresh();
@@ -108,6 +113,12 @@ namespace cursudsol {
                 solver.solve();
 
                 draw();
+
+                break;
+            }
+
+            case 's': {
+                draw(solver.solveStep());
 
                 break;
             }

@@ -6,14 +6,23 @@
 #include "NakedSingle.h"
 #include "HiddenSingle.h"
 #include "HiddenPair.h"
+#include "NakedN.h"
+#include <cstddef>
 
 namespace cursudsol {
     Solver::Solver(Grid& grid) : grid(grid) {
-        rules[0] = new CandidateRemoval();
-        rules[1] = new NakedSingle();
-        rules[2] = new HiddenSingle();
-        rules[3] = new NakedPair();
-        rules[4] = new HiddenPair();
+        std::size_t i = 0;
+        rules[i++] = new CandidateRemoval();
+        rules[i++] = new NakedSingle();
+        rules[i++] = new HiddenSingle();
+        rules[i++] = new NakedN(2, "NakedPair");
+        rules[i++] = new NakedN(3, "NakedTriple");
+        rules[i++] = new NakedN(4, "NakedQuad");
+        rules[i++] = new NakedN(5, "NakedQuint");
+        rules[i++] = new NakedN(6, "NakedSex");
+        rules[i++] = new NakedN(7, "NakedSept");
+        rules[i++] = new NakedN(8, "NakedOct");
+        rules[i++] = new HiddenPair();
     }
 
     Solver::~Solver() {
@@ -41,6 +50,8 @@ namespace cursudsol {
 
                 if (std::get<bool>(returnVal)) {
                     std::get<IntType>(returnVal) = rule.first;
+
+                    grid.compact();
 
                     break;
                 }
