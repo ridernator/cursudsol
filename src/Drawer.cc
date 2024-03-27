@@ -136,7 +136,7 @@ namespace cursudsol {
             init_pair(MAIN_GRID_COLOUR, COLOR_RED,   COLOR_BLACK);
             init_pair(SUB_GRID_COLOUR,  COLOR_BLUE,  COLOR_BLACK);
             init_pair(NUM_COLOUR,       COLOR_WHITE, COLOR_BLACK);
-            init_pair(FOUND_COLOUR,     COLOR_BLACK, COLOR_GREEN);
+            init_pair(FOUND_COLOUR,     COLOR_WHITE, COLOR_BLACK);
             init_pair(REMOVED_COLOUR,   COLOR_BLACK, COLOR_RED);
             init_pair(BECAUSE_COLOUR,   COLOR_BLACK, COLOR_BLUE);
         }

@@ -1,6 +1,7 @@
 #include "Solver.h"
 #include "CandidateRemoval.h"
 #include "Order.h"
+#include "PointingSet.h"
 #include "Rule.h"
 #include "NakedSingle.h"
 #include "HiddenSingle.h"
@@ -22,6 +23,7 @@ namespace cursudsol {
         rules[i++] = new HiddenN(3, "HiddenTriple");
         rules[i++] = new NakedN(4, "NakedQuad");
         rules[i++] = new HiddenN(4, "HiddenQuad");
+        rules[i++] = new PointingSet();
         // rules[i++] = new NakedN(5, "NakedQuint");
         // rules[i++] = new HiddenN(5, "HiddenQuint");
         // rules[i++] = new NakedN(6, "NakedSex");
