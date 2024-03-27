@@ -4,9 +4,9 @@
 #include "Rule.h"
 
 namespace cursudsol {
-    class PointingSet : public Rule {
+    class IntersectionRemoval : public Rule {
         public:
-            PointingSet(const std::string& name = "PointingSet") : Rule(name) {}
+            IntersectionRemoval(const std::string& name = "IntersectionRemoval") : Rule(name) {}
 
             SolverReturn solveStep(Grid& grid,
                                    const bool greedy = true) const override;
@@ -16,7 +16,7 @@ namespace cursudsol {
                                       const Group group,
                                       const IntType pencilMark) const;
 
-            bool areCellsInSameGroup(const std::set<Cell*> cells,
+            bool areCellsInSameGroup(const std::set<Cell*>& cells,
                                      Cell* groupStart,
                                      const Group group) const;
     };
