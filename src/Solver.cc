@@ -7,6 +7,7 @@
 #include "NakedN.h"
 #include "HiddenN.h"
 #include "IntersectionRemoval.h"
+#include "XWing.h"
 
 #include <cstddef>
 
@@ -24,6 +25,7 @@ namespace cursudsol {
         rules[i++] = new NakedN(4, "NakedQuad");
         rules[i++] = new HiddenN(4, "HiddenQuad");
         rules[i++] = new IntersectionRemoval();
+        rules[i++] = new XWing();
         // rules[i++] = new NakedN(5, "NakedQuint");
         // rules[i++] = new HiddenN(5, "HiddenQuint");
         // rules[i++] = new NakedN(6, "NakedSex");

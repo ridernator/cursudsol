@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Cell.h"
+#include "Direction.h"
 #include "Grid.h"
 #include "Order.h"
 
@@ -28,6 +29,18 @@ namespace cursudsol {
             bool isEnabled() const;
 
             void enable(const bool enabled = true);
+
+        protected:
+            std::set<Cell*> findCellsWithPencilMark(const Cell* cell,
+                                                    const Group groupType,
+                                                    const IntType pencilMark) const;
+
+            Cell* areCellsInSameGroup(const std::set<Cell*>& cells,
+                                      const Group groupType) const;
+
+            Cell* getGroupStart(const Cell* cell,
+                                const Group groupType,
+                                const Direction direction = Direction::PREVIOUS) const;
 
         private:
             const std::string name;
