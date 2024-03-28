@@ -20,6 +20,8 @@ namespace cursudsol {
             std::map<IntType, Rule*>& getRules();
 
         private:
+            void loadPlugins();
+
             Grid& grid;
 
             std::map<IntType, Rule*> rules;

@@ -33,4 +33,9 @@ namespace cursudsol {
 
         return returnVal;
     }
+
+
+    extern "C" Rule* createRule() {
+        return new CandidateRemoval();
+    }
 }

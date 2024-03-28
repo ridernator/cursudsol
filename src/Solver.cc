@@ -1,5 +1,4 @@
 #include "Solver.h"
-#include "CandidateRemoval.h"
 #include "Order.h"
 #include "Rule.h"
 #include "NakedSingle.h"
@@ -10,12 +9,13 @@
 #include "XWing.h"
 
 #include <cstddef>
+#include <dlfcn.h>
+#include <filesystem>
 
 namespace cursudsol {
     Solver::Solver(Grid& grid) : grid(grid) {
-        std::size_t i = 0;
+        std::size_t i = 1;
 
-        rules[i++] = new CandidateRemoval();
         rules[i++] = new NakedSingle();
         rules[i++] = new HiddenSingle();
         rules[i++] = new NakedN(2, "NakedPair");
@@ -34,6 +34,8 @@ namespace cursudsol {
         // rules[i++] = new HiddenN(7, "HiddenSept");
         // rules[i++] = new NakedN(8, "NakedOct");
         // rules[i++] = new HiddenN(8, "HiddenOct");
+
+        loadPlugins();
     }
 
     Solver::~Solver() {
@@ -74,5 +76,20 @@ namespace cursudsol {
 
     std::map<IntType, Rule*>& Solver::getRules() {
         return rules;
+    }
+
+    void Solver::loadPlugins() {
+        void* handle = dlopen("plugins/CandidateRemoval/libCandidateRemoval.so", RTLD_NOW);
+
+        if (handle == nullptr) {
+            fprintf(stderr, "%s\n", dlerror());
+            exit(1);
+        }
+
+        Rule* (*createRule)();
+        createRule = (Rule*(*)()) dlsym(handle, "createRule");
+            fprintf(stderr, "%s\n", dlerror());
+
+        rules[0] = createRule();
     }
 }
