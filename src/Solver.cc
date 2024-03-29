@@ -78,7 +78,8 @@ namespace cursudsol {
 
     void Solver::loadPlugins() {
         for (const auto& entry : std::filesystem::directory_iterator(PLUGIN_DIRECTORY)) {
-            if (!entry.is_directory()) {
+            if ((entry.path().extension() == ".so") &&
+                (!entry.is_directory())) {
                 for (Rule* rule : loadPlugin(entry.path())) {
                     rules[ruleIndex++] = rule;
                 }
