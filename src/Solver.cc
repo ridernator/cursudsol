@@ -1,41 +1,13 @@
 #include "Solver.h"
-#include "Order.h"
 #include "Rule.h"
-#include "NakedSingle.h"
-#include "HiddenSingle.h"
-#include "NakedN.h"
-#include "HiddenN.h"
-#include "IntersectionRemoval.h"
-#include "XWing.h"
 
-#include <cstddef>
 #include <dlfcn.h>
+#include <filesystem>
 #include <iostream>
 
 namespace cursudsol {
     Solver::Solver(Grid& grid) : grid(grid),
                                  ruleIndex(0) {
-        loadPlugins();
-
-        rules[ruleIndex++] = new NakedSingle();
-        rules[ruleIndex++] = new HiddenSingle();
-        rules[ruleIndex++] = new NakedN(2, "NakedPair");
-        rules[ruleIndex++] = new HiddenN(2, "HiddenPair");
-        rules[ruleIndex++] = new NakedN(3, "NakedTriple");
-        rules[ruleIndex++] = new HiddenN(3, "HiddenTriple");
-        rules[ruleIndex++] = new NakedN(4, "NakedQuad");
-        rules[ruleIndex++] = new HiddenN(4, "HiddenQuad");
-        rules[ruleIndex++] = new IntersectionRemoval();
-        rules[ruleIndex++] = new XWing();
-        // rules[ruleIndex++] = new NakedN(5, "NakedQuint");
-        // rules[ruleIndex++] = new HiddenN(5, "HiddenQuint");
-        // rules[ruleIndex++] = new NakedN(6, "NakedSex");
-        // rules[ruleIndex++] = new HiddenN(6, "HiddenSex");
-        // rules[ruleIndex++] = new NakedN(7, "NakedSept");
-        // rules[ruleIndex++] = new HiddenN(7, "HiddenSept");
-        // rules[ruleIndex++] = new NakedN(8, "NakedOct");
-        // rules[ruleIndex++] = new HiddenN(8, "HiddenOct");
-
         loadPlugins();
     }
 
@@ -94,7 +66,7 @@ namespace cursudsol {
         createRules = (std::set<Rule*>(*)()) dlsym(handle, "createRules");
 
         if ((errorString = dlerror()) != nullptr) {
-            std::cerr << "Error finding \"createRule\" function from \"" << pluginPath << "\" : " << errorString << std::endl;
+            std::cerr << "Error finding \"createRules\" function from \"" << pluginPath << "\" : " << errorString << std::endl;
 
             dlclose(handle);
 
@@ -105,8 +77,14 @@ namespace cursudsol {
     }
 
     void Solver::loadPlugins() {
-        for (Rule* rule : loadPlugin("plugins/CandidateRemoval/libCandidateRemoval.so")) {
-            rules[ruleIndex++] = rule;
+        std::string path = "plugins";
+
+        for (const auto& entry : std::filesystem::directory_iterator(path)) {
+            if (!entry.is_directory()) {
+                for (Rule* rule : loadPlugin(entry.path())) {
+                    rules[ruleIndex++] = rule;
+                }
+            }
         }
     }
 }

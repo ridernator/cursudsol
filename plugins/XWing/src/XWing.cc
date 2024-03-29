@@ -77,4 +77,8 @@ namespace cursudsol {
 
         return returnVal;
     }
+
+    extern "C" std::set<Rule*> createRules() {
+        return { new XWing() };
+    }
 }
