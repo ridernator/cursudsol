@@ -20,9 +20,9 @@ namespace cursudsol {
             std::map<IntType, Rule*>& getRules();
 
         private:
-            std::set<Rule*> loadPlugin(const std::string& pluginPath);
+            bool loadRulesFromPlugin(const std::string& pluginPath);
 
-            void loadPlugins();
+            void loadPluginRules();
 
             static const inline std::string PLUGIN_DIRECTORY = "plugins";
 

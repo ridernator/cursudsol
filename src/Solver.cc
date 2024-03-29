@@ -8,7 +8,7 @@
 namespace cursudsol {
     Solver::Solver(Grid& grid) : grid(grid),
                                  ruleIndex(0) {
-        loadPlugins();
+        loadPluginRules();
     }
 
     Solver::~Solver() {
@@ -51,7 +51,7 @@ namespace cursudsol {
         return rules;
     }
 
-    std::set<Rule*> Solver::loadPlugin(const std::string& pluginPath) {
+    bool Solver::loadRulesFromPlugin(const std::string& pluginPath) {
         char* errorString;
 
         void* handle = dlopen(pluginPath.c_str(), RTLD_NOW);
@@ -59,30 +59,32 @@ namespace cursudsol {
         if ((errorString = dlerror()) != nullptr) {
             std::cerr << "Error opening plugin \"" << pluginPath << "\" : " << errorString << std::endl;
 
-            return {};
+            return false;
         }
 
         std::set<Rule*> (*createRules)();
-        createRules = (std::set<Rule*>(*)()) dlsym(handle, "createRules");
+        *(void**) (&createRules) = dlsym(handle, "createRules");
 
         if ((errorString = dlerror()) != nullptr) {
             std::cerr << "Error finding \"createRules\" function from \"" << pluginPath << "\" : " << errorString << std::endl;
 
             dlclose(handle);
 
-            return {};
+            return false;
         }
 
-        return createRules();
+        for (Rule* rule : createRules()) {
+            rules[ruleIndex++] = rule;
+        }
+
+        return true;
     }
 
-    void Solver::loadPlugins() {
+    void Solver::loadPluginRules() {
         for (const auto& entry : std::filesystem::directory_iterator(PLUGIN_DIRECTORY)) {
             if ((entry.path().extension() == ".so") &&
                 (!entry.is_directory())) {
-                for (Rule* rule : loadPlugin(entry.path())) {
-                    rules[ruleIndex++] = rule;
-                }
+                loadRulesFromPlugin(entry.path());
             }
         }
     }
