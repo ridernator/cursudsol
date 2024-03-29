@@ -2,6 +2,8 @@
 #include "Order.h"
 #include "Rule.h"
 
+#include <set>
+
 namespace cursudsol {
     SolverReturn CandidateRemoval::solveStep(Grid& grid,
                                              const bool greedy) const {
@@ -32,5 +34,9 @@ namespace cursudsol {
         }
 
         return returnVal;
+    }
+
+    extern "C" std::set<Rule*> createRules() {
+        return { new CandidateRemoval() };
     }
 }

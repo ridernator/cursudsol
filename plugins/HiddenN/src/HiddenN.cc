@@ -77,4 +77,10 @@ namespace cursudsol {
 
         return returnVal;
     }
+
+    extern "C" std::set<Rule*> createRules() {
+        return { new HiddenN(2, "HiddenPair"),
+                 new HiddenN(3, "HiddenTriple"),
+                 new HiddenN(4, "HiddenQuad") };
+    }
 }

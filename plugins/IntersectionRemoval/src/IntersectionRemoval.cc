@@ -94,4 +94,8 @@ namespace cursudsol {
 
         return true;
     }
+
+    extern "C" std::set<Rule*> createRules() {
+        return { new IntersectionRemoval() };
+    }
 }
