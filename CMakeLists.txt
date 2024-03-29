@@ -22,13 +22,13 @@ add_executable(${APPLICATION_NAME} ${SRC_DIR}/Cell.cc
                                    ${SRC_DIR}/NDLoop.cc
                                    ${SRC_DIR}/Order.cc
                                    ${SRC_DIR}/Solver.cc
+                                   ${SRC_DIR}/Rule.cc
                                    ${SRC_DIR}/${RULES_DIR}/EmptyRule.cc
                                    ${SRC_DIR}/${RULES_DIR}/HiddenN.cc
                                    ${SRC_DIR}/${RULES_DIR}/HiddenSingle.cc
                                    ${SRC_DIR}/${RULES_DIR}/NakedN.cc
                                    ${SRC_DIR}/${RULES_DIR}/IntersectionRemoval.cc
                                    ${SRC_DIR}/${RULES_DIR}/NakedSingle.cc
-                                   ${SRC_DIR}/${RULES_DIR}/Rule.cc
                                    ${SRC_DIR}/${RULES_DIR}/XWing.cc)
 
 target_include_directories(${APPLICATION_NAME} PUBLIC ${INC_DIR}

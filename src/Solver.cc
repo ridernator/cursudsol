@@ -10,30 +10,31 @@
 
 #include <cstddef>
 #include <dlfcn.h>
-#include <filesystem>
+#include <iostream>
 
 namespace cursudsol {
-    Solver::Solver(Grid& grid) : grid(grid) {
-        std::size_t i = 1;
+    Solver::Solver(Grid& grid) : grid(grid),
+                                 ruleIndex(0) {
+        loadPlugins();
 
-        rules[i++] = new NakedSingle();
-        rules[i++] = new HiddenSingle();
-        rules[i++] = new NakedN(2, "NakedPair");
-        rules[i++] = new HiddenN(2, "HiddenPair");
-        rules[i++] = new NakedN(3, "NakedTriple");
-        rules[i++] = new HiddenN(3, "HiddenTriple");
-        rules[i++] = new NakedN(4, "NakedQuad");
-        rules[i++] = new HiddenN(4, "HiddenQuad");
-        rules[i++] = new IntersectionRemoval();
-        rules[i++] = new XWing();
-        // rules[i++] = new NakedN(5, "NakedQuint");
-        // rules[i++] = new HiddenN(5, "HiddenQuint");
-        // rules[i++] = new NakedN(6, "NakedSex");
-        // rules[i++] = new HiddenN(6, "HiddenSex");
-        // rules[i++] = new NakedN(7, "NakedSept");
-        // rules[i++] = new HiddenN(7, "HiddenSept");
-        // rules[i++] = new NakedN(8, "NakedOct");
-        // rules[i++] = new HiddenN(8, "HiddenOct");
+        rules[ruleIndex++] = new NakedSingle();
+        rules[ruleIndex++] = new HiddenSingle();
+        rules[ruleIndex++] = new NakedN(2, "NakedPair");
+        rules[ruleIndex++] = new HiddenN(2, "HiddenPair");
+        rules[ruleIndex++] = new NakedN(3, "NakedTriple");
+        rules[ruleIndex++] = new HiddenN(3, "HiddenTriple");
+        rules[ruleIndex++] = new NakedN(4, "NakedQuad");
+        rules[ruleIndex++] = new HiddenN(4, "HiddenQuad");
+        rules[ruleIndex++] = new IntersectionRemoval();
+        rules[ruleIndex++] = new XWing();
+        // rules[ruleIndex++] = new NakedN(5, "NakedQuint");
+        // rules[ruleIndex++] = new HiddenN(5, "HiddenQuint");
+        // rules[ruleIndex++] = new NakedN(6, "NakedSex");
+        // rules[ruleIndex++] = new HiddenN(6, "HiddenSex");
+        // rules[ruleIndex++] = new NakedN(7, "NakedSept");
+        // rules[ruleIndex++] = new HiddenN(7, "HiddenSept");
+        // rules[ruleIndex++] = new NakedN(8, "NakedOct");
+        // rules[ruleIndex++] = new HiddenN(8, "HiddenOct");
 
         loadPlugins();
     }
@@ -78,18 +79,34 @@ namespace cursudsol {
         return rules;
     }
 
-    void Solver::loadPlugins() {
-        void* handle = dlopen("plugins/CandidateRemoval/libCandidateRemoval.so", RTLD_NOW);
+    std::set<Rule*> Solver::loadPlugin(const std::string& pluginPath) {
+        char* errorString;
 
-        if (handle == nullptr) {
-            fprintf(stderr, "%s\n", dlerror());
-            exit(1);
+        void* handle = dlopen(pluginPath.c_str(), RTLD_NOW);
+
+        if ((errorString = dlerror()) != nullptr) {
+            std::cerr << "Error opening plugin \"" << pluginPath << "\" : " << errorString << std::endl;
+
+            return {};
         }
 
-        Rule* (*createRule)();
-        createRule = (Rule*(*)()) dlsym(handle, "createRule");
-            fprintf(stderr, "%s\n", dlerror());
+        std::set<Rule*> (*createRules)();
+        createRules = (std::set<Rule*>(*)()) dlsym(handle, "createRules");
 
-        rules[0] = createRule();
+        if ((errorString = dlerror()) != nullptr) {
+            std::cerr << "Error finding \"createRule\" function from \"" << pluginPath << "\" : " << errorString << std::endl;
+
+            dlclose(handle);
+
+            return {};
+        }
+
+        return createRules();
+    }
+
+    void Solver::loadPlugins() {
+        for (Rule* rule : loadPlugin("plugins/CandidateRemoval/libCandidateRemoval.so")) {
+            rules[ruleIndex++] = rule;
+        }
     }
 }
