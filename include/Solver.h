@@ -24,6 +24,8 @@ namespace cursudsol {
 
             void loadPlugins();
 
+            static const inline std::string PLUGIN_DIRECTORY = "plugins";
+
             Grid& grid;
 
             std::map<IntType, Rule*> rules;
